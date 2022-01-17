@@ -7,11 +7,16 @@ import SelectAstronauts from "./FormSections/SelectAstronauts";
 import CheckFood from "./FormSections/CheckFood";
 import Load from "./FormSections/Load";
 
+// astronauts status is patchy, don't know why
+// filter unchecked fasters out - they stay in the state
+
 function CreateNewFlight() {
   const [selectedRocket, setSelectedRocket] = useState();
   const [fuelForFlight, setFuelForFlight] = useState([]);
   const [selectedAstronauts, setSelectedAstronauts] = useState([]);
   const [durationSeconds, setDurationSeconds] = useState();
+  const [partAstronauts, setPartAstronauts] = useState(false);
+  const [partFood, setPartFood] = useState(false);
   const [completedParts, setCompletedParts] = useState({
     schedule: false,
     fuel: false,
@@ -27,7 +32,7 @@ function CreateNewFlight() {
     if (
       completedParts.schedule &&
       completedParts.fuel &&
-      completedParts.astronauts &&
+      partAstronauts &&
       completedParts.food &&
       completedParts.load
     ) {
@@ -35,9 +40,7 @@ function CreateNewFlight() {
     } else {
       setDisabledStart(true);
     }
-  }, [completedParts]);
-
-  console.log(completedParts);
+  }, [completedParts, partAstronauts]);
 
   return (
     <StyledNewFlight>
@@ -61,10 +64,7 @@ function CreateNewFlight() {
               check fuel
             </StatusButton>
 
-            <StatusButton
-              className="statusBtn"
-              filled={completedParts.astronauts}
-            >
+            <StatusButton className="statusBtn" filled={partAstronauts}>
               select astronauts
             </StatusButton>
             <StatusButton className="statusBtn" filled={completedParts.food}>
@@ -100,8 +100,8 @@ function CreateNewFlight() {
               selectedRocket={selectedRocket}
               selectedAstronauts={selectedAstronauts}
               setSelectedAstronauts={setSelectedAstronauts}
-              setCompletedParts={setCompletedParts}
-              completedParts={completedParts}
+              setCompletedParts={setPartAstronauts}
+              completedParts={partAstronauts}
             />
             <CheckFood
               selectedRocket={selectedRocket}

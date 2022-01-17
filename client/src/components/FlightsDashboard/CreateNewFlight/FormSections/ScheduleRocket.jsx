@@ -29,9 +29,10 @@ function ScheduleRocket({
     if (!name || !time || !date || !distance || !selectedRocket) {
       setCompletedParts({ ...completedParts, schedule: false });
       return setNotification("Fill out all the info");
+    } else {
+      setCompletedParts({ ...completedParts, schedule: true });
+      setNotification("Schedule&Rocket OK");
     }
-    setCompletedParts({ ...completedParts, schedule: true });
-    setNotification("Schedule&Rocket OK");
   }, [name, time, date, distance, selectedRocket, notification]);
 
   useEffect(() => {

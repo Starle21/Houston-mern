@@ -29,14 +29,23 @@ function SelectAstronauts({
       return setNotification("Complete previous parts first");
     }
     if (!selectedAstronauts) {
-      setCompletedParts({ ...completedParts, astronauts: false });
+      // setCompletedParts({ ...completedParts, astronauts: false });
+      setCompletedParts(false);
       return setNotification("Select Astronauts");
     }
     if (selectedAstronauts.length === selectedRocket.numberCrew) {
-      setCompletedParts({ ...completedParts, astronauts: true });
+      // setCompletedParts({
+      //   ...completedParts,
+      //   astronauts: true,
+      // });
+      setCompletedParts(true);
       setNotification("Astronauts OK");
     } else {
-      setCompletedParts({ ...completedParts, astronauts: false });
+      // setCompletedParts({
+      //   ...completedParts,
+      //   astronauts: false,
+      // });
+      setCompletedParts(false);
       return setNotification("Select the whole crew");
     }
   }, [selectedRocket, selectedAstronauts]);

@@ -24,7 +24,8 @@ function CheckFood({
       return setNotification("Complete previous parts first");
     }
     if (totalFood() > selectedRocket.fridgeCapacity) {
-      setCompletedParts({ ...completedParts, food: false });
+      const part = { ...completedParts, food: false };
+      setCompletedParts(part);
       return setNotification("Too small a fridge!");
     }
     if (totalFood() < selectedRocket.foodCurrentLevel) {
