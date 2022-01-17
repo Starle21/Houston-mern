@@ -4,12 +4,12 @@ export default [
     name: "Apollo 2022",
     speed: 8,
     consumption: 0.6,
-    load: 260,
+    load: 220,
     numberCrew: 3,
     tankCapacity: 2500000,
     tankCurrentLevel: 300000,
     fridgeCapacity: 30,
-    fridgeCurrentFullness: 3,
+    foodCurrentLevel: 3,
   },
   {
     id: "02",
@@ -21,6 +21,6 @@ export default [
     tankCapacity: 4000000,
     tankCurrentLevel: 400000,
     fridgeCapacity: 60,
-    fridgeCurrentFullness: 1,
+    foodCurrentLevel: 1,
   },
 ];

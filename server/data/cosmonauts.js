@@ -8,6 +8,14 @@ export default [
     foodPerHour: 0.09,
   },
   {
+    name: "Peter",
+    surname: "Aldrin",
+    dateOfBirth: "1986-07-09",
+    gender: "male",
+    weight: 75,
+    foodPerHour: 0.11,
+  },
+  {
     name: "Tom",
     surname: "Overthemoon",
     dateOfBirth: "1979-01-30",

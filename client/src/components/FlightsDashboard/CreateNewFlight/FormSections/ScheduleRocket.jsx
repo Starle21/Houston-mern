@@ -8,6 +8,7 @@ function ScheduleRocket({
   selectedRocket,
   setSelectedRocket,
   setFuelForFlight,
+  setDurationSeconds,
 }) {
   const [notification] = useState("");
   const [name, setName] = useState("Over the moon");
@@ -42,6 +43,8 @@ function ScheduleRocket({
     const durationMinutes = (durationSeconds / 60) % 60;
     const durationHours = durationSeconds / 60 / 60;
     const durationDays = durationHours / 24;
+
+    setDurationSeconds(durationSeconds);
 
     setTouchdownDate(touchDownTime.toLocaleDateString());
     setTouchdownTime(

@@ -4,10 +4,13 @@ import styled from "styled-components";
 import astronautService from "../../../../services/astronauts";
 import AstronautRow from "./AstronautRow";
 
-function SelectAstronauts({ selectedRocket }) {
+function SelectAstronauts({
+  selectedRocket,
+  setSelectedAstronauts,
+  selectedAstronauts,
+}) {
   const [notification, setNotification] = useState();
   const [astronauts, setAstronauts] = useState([]);
-  const [selectedAstronauts, setSelectedAstronauts] = useState([]);
 
   // get all available astronauts
   useEffect(() => {
@@ -40,7 +43,7 @@ function SelectAstronauts({ selectedRocket }) {
               : "select rocket first"}
           </span>
         </div>
-        <div>Select Astronauts:</div>
+        <div>Select Available Astronauts:</div>
         {astronauts?.map((a, i) => {
           return (
             <AstronautRow
