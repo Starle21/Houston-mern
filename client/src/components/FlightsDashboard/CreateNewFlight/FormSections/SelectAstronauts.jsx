@@ -8,6 +8,8 @@ function SelectAstronauts({
   selectedRocket,
   setSelectedAstronauts,
   selectedAstronauts,
+  setCompletedParts,
+  completedParts,
 }) {
   const [notification, setNotification] = useState();
   const [astronauts, setAstronauts] = useState([]);
@@ -23,12 +25,20 @@ function SelectAstronauts({
 
   // notifications
   useEffect(() => {
-    if (!selectedRocket)
+    if (!selectedRocket) {
       return setNotification("Complete previous parts first");
-    if (!selectedAstronauts) return setNotification("Select Astronauts");
-    if (selectedAstronauts.length === selectedRocket.numberCrew)
-      return setNotification("Astronauts OK");
-    else return setNotification("Select the whole crew");
+    }
+    if (!selectedAstronauts) {
+      setCompletedParts({ ...completedParts, astronauts: false });
+      return setNotification("Select Astronauts");
+    }
+    if (selectedAstronauts.length === selectedRocket.numberCrew) {
+      setCompletedParts({ ...completedParts, astronauts: true });
+      setNotification("Astronauts OK");
+    } else {
+      setCompletedParts({ ...completedParts, astronauts: false });
+      return setNotification("Select the whole crew");
+    }
   }, [selectedRocket, selectedAstronauts]);
 
   return (

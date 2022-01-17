@@ -9,8 +9,10 @@ function ScheduleRocket({
   setSelectedRocket,
   setFuelForFlight,
   setDurationSeconds,
+  setCompletedParts,
+  completedParts,
 }) {
-  const [notification] = useState("");
+  const [notification, setNotification] = useState("");
   const [name, setName] = useState("Over the moon");
   const [time, setTime] = useState("12:15");
   const [date, setDate] = useState("2022-01-12");
@@ -22,6 +24,15 @@ function ScheduleRocket({
   const [durationHours, setDurationHours] = useState();
   const [durationMinutes, setDurationMinutes] = useState();
   const [durationDays, setDurationDays] = useState();
+
+  useEffect(() => {
+    if (!name || !time || !date || !distance || !selectedRocket) {
+      setCompletedParts({ ...completedParts, schedule: false });
+      return setNotification("Fill out all the info");
+    }
+    setCompletedParts({ ...completedParts, schedule: true });
+    setNotification("Schedule&Rocket OK");
+  }, [name, time, date, distance, selectedRocket, notification]);
 
   useEffect(() => {
     const getAllRockets = async () => {

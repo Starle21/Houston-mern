@@ -19,7 +19,8 @@ function CreateNewFlight() {
     food: false,
     load: false,
   });
-  const [allowStart, setAllowStart] = useState(false);
+  const [disabledStart, setDisabledStart] = useState(true);
+  const [fasters, setFasters] = useState([]);
 
   // if all completed parts true, enable SCHEDULE FLIGHT button
   useEffect(() => {
@@ -30,9 +31,13 @@ function CreateNewFlight() {
       completedParts.food &&
       completedParts.load
     ) {
-      setAllowStart(true);
+      setDisabledStart(false);
+    } else {
+      setDisabledStart(true);
     }
   }, [completedParts]);
+
+  console.log(completedParts);
 
   return (
     <StyledNewFlight>
@@ -43,18 +48,35 @@ function CreateNewFlight() {
         <div className="divider"></div>
         <div>
           <div className="statusBar">
-            <div className="status">
-              <span>start {">> "} </span>
-              <button>schedule&rocket</button>
-              <button>check fuel</button>
-              <button>select astronauts</button>
-              <button>check food</button>
-              <button>check load</button>
-              <span> {" >> "}</span>
-              <button className="main" disabled={allowStart}>
-                schedule flight
-              </button>
-            </div>
+            <span> {">> "} </span>
+
+            <StatusButton
+              className="statusBtn"
+              filled={completedParts.schedule}
+            >
+              schedule&rocket
+            </StatusButton>
+
+            <StatusButton className="statusBtn" filled={completedParts.fuel}>
+              check fuel
+            </StatusButton>
+
+            <StatusButton
+              className="statusBtn"
+              filled={completedParts.astronauts}
+            >
+              select astronauts
+            </StatusButton>
+            <StatusButton className="statusBtn" filled={completedParts.food}>
+              check food
+            </StatusButton>
+            <StatusButton className="statusBtn" filled={completedParts.load}>
+              check load
+            </StatusButton>
+            <span> {" >> "}</span>
+            <MainButton className="main" disabled={disabledStart}>
+              schedule flight
+            </MainButton>
           </div>
           <form action="">
             <ScheduleRocket
@@ -64,18 +86,22 @@ function CreateNewFlight() {
               durationSeconds={durationSeconds}
               setDurationSeconds={setDurationSeconds}
               setCompletedParts={setCompletedParts}
+              completedParts={completedParts}
             />
+
             <Fuel
               selectedRocket={selectedRocket}
               setSelectedRocket={setSelectedRocket}
               fuelForFlight={fuelForFlight}
               setCompletedParts={setCompletedParts}
+              completedParts={completedParts}
             />
             <SelectAstronauts
               selectedRocket={selectedRocket}
               selectedAstronauts={selectedAstronauts}
               setSelectedAstronauts={setSelectedAstronauts}
               setCompletedParts={setCompletedParts}
+              completedParts={completedParts}
             />
             <CheckFood
               selectedRocket={selectedRocket}
@@ -83,11 +109,15 @@ function CreateNewFlight() {
               durationSeconds={durationSeconds}
               setSelectedRocket={setSelectedRocket}
               setCompletedParts={setCompletedParts}
+              completedParts={completedParts}
+              fasters={fasters}
+              setFasters={setFasters}
             />
             <Load
               selectedRocket={selectedRocket}
               selectedAstronauts={selectedAstronauts}
               setCompletedParts={setCompletedParts}
+              completedParts={completedParts}
             />
           </form>
         </div>
@@ -96,6 +126,20 @@ function CreateNewFlight() {
     </StyledNewFlight>
   );
 }
+
+const MainButton = styled.button`
+  text-transform: uppercase;
+  font-family: "JohnSans Black Pro";
+  font-weight: bold;
+  border: none;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  background-color: ${(props) => (props.disabled ? "#a0b3a2" : "#38b449")};
+  padding: 0.4rem 5rem;
+  color: white;
+  border-radius: 0.5rem;
+  font-size: 20px;
+  margin: 15px 0;
+`;
 
 const StyledNewFlight = styled.div`
   font-family: "JohnSans Lite Pro";
@@ -133,8 +177,13 @@ const StyledNewFlight = styled.div`
   .statusBar {
     display: flex;
     justify-content: center;
+    gap: 0.2rem;
+    align-items: baseline;
+
     position: sticky;
+
     padding-top: 25px;
+    padding-bottom: 20px;
     top: 100px;
     background-color: #fff;
   }
@@ -144,23 +193,26 @@ const StyledNewFlight = styled.div`
     text-transform: uppercase;
   }
 
-  .main {
-    text-transform: uppercase;
-    font-family: "JohnSans Black Pro";
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    background-color: #38b449;
-    padding: 0.4rem 5rem;
-    color: white;
-    border-radius: 0.5rem;
-    font-size: 20px;
-    margin: 15px 0;
-  }
-
   .last {
     margin-bottom: 10rem;
   }
+
+  .statusBtn {
+    text-transform: uppercase;
+    font-family: "JohnSans Black Pro";
+    font-size: 13px;
+    border: 1px solid #191e3b;
+    border-radius: 0.3rem;
+    /* background-color: #fff; */
+    /* color: #191e3b; */
+    padding: 0.4rem 1rem;
+    /* cursor: pointer; */
+  }
+`;
+
+const StatusButton = styled.button`
+  background-color: ${(props) => (props.filled ? "#191e3b" : "#fff")};
+  color: ${(props) => (props.filled ? "#fff" : "#191e3b")};
 `;
 
 export default CreateNewFlight;

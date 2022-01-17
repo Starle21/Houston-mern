@@ -8,30 +8,36 @@ function CheckFood({
   selectedAstronauts,
   durationSeconds,
   setSelectedRocket,
+  setCompletedParts,
+  completedParts,
+  fasters,
+  setFasters,
 }) {
   const [notification, setNotification] = useState();
-  const [faster, setFaster] = useState([]);
 
   useEffect(() => {
     if (
       selectedAstronauts.length < selectedRocket?.numberCrew ||
       !selectedRocket
     ) {
+      setCompletedParts({ ...completedParts, food: false });
       return setNotification("Complete previous parts first");
     }
     if (totalFood() > selectedRocket.fridgeCapacity) {
+      setCompletedParts({ ...completedParts, food: false });
       return setNotification("Too small a fridge!");
     }
     if (totalFood() < selectedRocket.foodCurrentLevel) {
+      setCompletedParts({ ...completedParts, food: false });
       return setNotification("Take food out");
     }
     if (totalFood() > selectedRocket.foodCurrentLevel) {
+      setCompletedParts({ ...completedParts, food: false });
       return setNotification("Not enough food");
     }
-
+    setCompletedParts({ ...completedParts, food: true });
     setNotification("Food OK");
-    // notification
-  }, [faster, selectedAstronauts, selectedRocket]);
+  }, [fasters, selectedAstronauts, selectedRocket, notification]);
 
   const placeRequiredFood = (e) => {
     e.preventDefault();
@@ -45,11 +51,11 @@ function CheckFood({
   };
 
   const fastHandler = (e) => {
-    if (faster.some((f) => f.surname === e.target.value)) {
-      setFaster(faster.filter((f) => f.surname !== e.target.value));
+    if (fasters.some((f) => f.surname === e.target.value)) {
+      setFasters(fasters.filter((f) => f.surname !== e.target.value));
     } else {
-      setFaster([
-        ...faster,
+      setFasters([
+        ...fasters,
         selectedAstronauts.filter((f) => f.surname === e.target.value)[0],
       ]);
     }
@@ -59,10 +65,11 @@ function CheckFood({
     const durationHour = durationSeconds / 60 / 60;
     const foodNoFast = Math.round(totalFoodPerHour() * durationHour);
     const thirtyPercent = durationHour * 0.3;
-    const fasterPerHour = faster.reduce((sum, current) => {
+    const fastersPerHour = fasters.reduce((sum, current) => {
       return sum + current.foodPerHour;
     }, 0);
-    const totalFood = Math.round(foodNoFast - thirtyPercent * fasterPerHour);
+    // console.log(fastersPerHour);
+    const totalFood = Math.round(foodNoFast - thirtyPercent * fastersPerHour);
 
     return totalFood;
   };

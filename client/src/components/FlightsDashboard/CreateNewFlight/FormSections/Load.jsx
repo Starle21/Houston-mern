@@ -3,7 +3,12 @@ import DivideFlights from "../../DivideFlights";
 import styled from "styled-components";
 import LoadAstronautRow from "./LoadAstronautRow";
 
-function Load({ selectedRocket, selectedAstronauts }) {
+function Load({
+  selectedRocket,
+  selectedAstronauts,
+  setCompletedParts,
+  completedParts,
+}) {
   const [notification, setNotification] = useState();
 
   const totalAstronautsWeight = () => {
@@ -15,19 +20,21 @@ function Load({ selectedRocket, selectedAstronauts }) {
   const totalLoad = totalAstronautsWeight() + selectedRocket?.foodCurrentLevel;
 
   useEffect(() => {
-    if (!selectedRocket)
+    if (
+      !selectedRocket ||
+      selectedAstronauts.length !== selectedRocket.numberCrew
+    ) {
+      setCompletedParts({ ...completedParts, load: false });
       return setNotification("Complete previous parts first");
-    // if (
-    //   selectedAstronauts.length < selectedRocket.numberCrew ||
-    //   !selectedRocket
-    // ) {
-    //   return setNotification("Complete previous parts first");
-    // }
+    }
+
     if (totalLoad > selectedRocket?.load) {
+      setCompletedParts({ ...completedParts, load: false });
       return setNotification(
         "The rocket is overloaded. Make it lighter (eg. take food out)"
       );
     }
+    setCompletedParts({ ...completedParts, load: true });
     setNotification("Load ok");
   }, [selectedRocket, totalLoad]);
 

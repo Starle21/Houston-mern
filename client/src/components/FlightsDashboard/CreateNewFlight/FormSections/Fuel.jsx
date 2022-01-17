@@ -2,40 +2,53 @@ import React, { useState, useEffect } from "react";
 import DivideFlights from "../../DivideFlights";
 import styled from "styled-components";
 
-function Fuel({ selectedRocket, setSelectedRocket, fuelForFlight }) {
+function Fuel({
+  selectedRocket,
+  setSelectedRocket,
+  fuelForFlight,
+  setCompletedParts,
+  completedParts,
+}) {
   const [notification, setNotification] = useState();
 
   //   set notifications
   useEffect(() => {
     if (!selectedRocket) return setNotification("No rocket selected");
     if (selectedRocket.tankCurrentLevel < fuelForFlight) {
+      setCompletedParts({ ...completedParts, fuel: false });
       setNotification("not enough fuel");
     }
     if (fuelForFlight > selectedRocket.tankCapacity) {
+      setCompletedParts({ ...completedParts, fuel: false });
       setNotification("too small a tank");
     }
     if (
       fuelForFlight <= selectedRocket.tankCurrentLevel &&
       fuelForFlight < selectedRocket.tankCapacity
     ) {
+      setCompletedParts({ ...completedParts, fuel: true });
       setNotification("Fuel part ok");
     }
     if (selectedRocket.tankCurrentLevel > fuelForFlight + fuelForFlight * 0.1) {
+      setCompletedParts({ ...completedParts, fuel: false });
       setNotification("Take fuel out");
     }
-  }, [selectedRocket, fuelForFlight]);
+  }, [selectedRocket, fuelForFlight, notification]);
 
   // clicking on add fuel button to crank up the current fuel level
   const addFuel = (e) => {
     e.preventDefault();
     const volume = fuelForFlight + fuelForFlight * 0.1;
     if (fuelForFlight > selectedRocket.tankCapacity) {
+      setCompletedParts({ ...completedParts, fuel: false });
       setNotification("Not allowed, tank is too small for the flight");
       return;
     }
     if (volume > selectedRocket.tankCapacity) {
+      setCompletedParts({ ...completedParts, fuel: true });
       setSelectedRocket({ ...selectedRocket, tankCurrentLevel: fuelForFlight });
     } else {
+      setCompletedParts({ ...completedParts, fuel: true });
       setSelectedRocket({ ...selectedRocket, tankCurrentLevel: volume });
     }
 
