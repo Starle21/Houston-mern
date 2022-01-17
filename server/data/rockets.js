@@ -1,0 +1,26 @@
+export default [
+  {
+    id: "01",
+    name: "Apollo 2022",
+    speed: 8,
+    consumption: 0.6,
+    load: 260,
+    numberCrew: 3,
+    tankCapacity: 2500000,
+    tankCurrentLevel: 300000,
+    fridgeCapacity: 30,
+    fridgeCurrentFullness: 3,
+  },
+  {
+    id: "02",
+    name: "Sputnik 2000",
+    speed: 10,
+    consumption: 0.9,
+    load: 350,
+    numberCrew: 5,
+    tankCapacity: 4000000,
+    tankCurrentLevel: 400000,
+    fridgeCapacity: 60,
+    fridgeCurrentFullness: 1,
+  },
+];
