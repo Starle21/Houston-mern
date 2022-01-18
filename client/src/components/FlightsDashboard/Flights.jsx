@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import DivideFlights from "../CommonSignedIn/DivideFlights";
 import Flight from "./Flight";
-import flightService from "../../services/flights";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getFlights } from "../../store/reducers/flightReducer";
 
 function Flights() {
-  const [flights, setFlights] = useState([]);
+  const dispatch = useDispatch();
+  const flights = useSelector((state) => state.flights);
 
   console.log(flights);
+
+  // get flights on first render
   useEffect(() => {
-    flightService.getAll().then((allFlights) => setFlights(allFlights));
-    // const getAllFlights = async () => {
-    //   const allFlights = await flightService.getAll();
-    //   setFlights(allFlights);
-    // };
-    // getAllFlights();
+    dispatch(getFlights());
   }, []);
 
   return (
