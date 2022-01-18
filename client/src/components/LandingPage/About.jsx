@@ -5,7 +5,7 @@ import { Breakpoints } from "../../styles/Breakpoints";
 function About() {
   return (
     <StyledAbout>
-      <div className="borders">
+      <div className="borders" id="about">
         <section className="title">
           <h3>
             This app is a training material <br /> built as a comprehensive

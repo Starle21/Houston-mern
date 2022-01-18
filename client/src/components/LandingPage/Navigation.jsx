@@ -10,7 +10,7 @@ function Navigation() {
       <div className="navigation">
         <ul>
           <li>
-            <a href="/">about</a>
+            <a href="#about">about</a>
           </li>
           <li>
             {" "}

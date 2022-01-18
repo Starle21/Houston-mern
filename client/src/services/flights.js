@@ -9,6 +9,11 @@ const getAll = async () => {
   return response.data;
 };
 
-const toExport = { getAll };
+const create = async (newFlight) => {
+  const response = await axios.post(baseUrl, newFlight);
+  return response.data;
+};
+
+const toExport = { getAll, create };
 
 export default toExport;

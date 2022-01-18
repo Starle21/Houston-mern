@@ -10,7 +10,14 @@ flightsRouter.get("/", (_req, res) => {
 
 // CREATE NEW
 flightsRouter.post("/", (_req, res) => {
-  res.send("Creating a new flight!");
+  try {
+    const newFlight = _req.body;
+    const addedFlight = flightService.addFlight(newFlight);
+    res.json(addedFlight);
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+  // res.send("Creating a new flight!");
 });
 
 export default flightsRouter;

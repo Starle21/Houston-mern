@@ -6,8 +6,9 @@ import Fuel from "./FormSections/Fuel";
 import SelectAstronauts from "./FormSections/SelectAstronauts";
 import CheckFood from "./FormSections/CheckFood";
 import Load from "./FormSections/Load";
+import flightService from "../../../services/flights";
 
-// astronauts status is patchy, don't know why
+// astronauts status was patchy - state updated in the following components from the old state object.. - redux should fix that
 // filter unchecked fasters out - they stay in the state
 
 function CreateNewFlight() {
@@ -16,21 +17,22 @@ function CreateNewFlight() {
   const [selectedAstronauts, setSelectedAstronauts] = useState([]);
   const [durationSeconds, setDurationSeconds] = useState();
   const [partAstronauts, setPartAstronauts] = useState(false);
-  const [partFood, setPartFood] = useState(false);
+  const [partSchedule, setPartSchedule] = useState(false);
   const [completedParts, setCompletedParts] = useState({
-    schedule: false,
     fuel: false,
-    astronauts: false,
     food: false,
     load: false,
   });
   const [disabledStart, setDisabledStart] = useState(true);
   const [fasters, setFasters] = useState([]);
+  const [distance, setDistance] = useState(3000000);
+  const [name, setName] = useState("Over the moon");
+  const [takeOff, setTakeOff] = useState("");
 
   // if all completed parts true, enable SCHEDULE FLIGHT button
   useEffect(() => {
     if (
-      completedParts.schedule &&
+      partSchedule &&
       completedParts.fuel &&
       partAstronauts &&
       completedParts.food &&
@@ -40,7 +42,23 @@ function CreateNewFlight() {
     } else {
       setDisabledStart(true);
     }
-  }, [completedParts, partAstronauts]);
+  }, [completedParts, partAstronauts, partSchedule]);
+
+  const createNewFlight = (e) => {
+    e.preventDefault();
+    const newFlight = {
+      name: name,
+      takeOffTimeDate: takeOff,
+      distance: distance,
+      rocket: selectedRocket,
+      //rocket current tank level
+      //rocket current food level
+      astronauts: selectedAstronauts,
+      fasters: fasters,
+    };
+    flightService.create(newFlight).then((res) => console.log(res));
+    // console.log(newFlight);
+  };
 
   return (
     <StyledNewFlight>
@@ -53,10 +71,7 @@ function CreateNewFlight() {
           <div className="statusBar">
             <span> {">> "} </span>
 
-            <StatusButton
-              className="statusBtn"
-              filled={completedParts.schedule}
-            >
+            <StatusButton className="statusBtn" filled={partSchedule}>
               schedule&rocket
             </StatusButton>
 
@@ -74,19 +89,29 @@ function CreateNewFlight() {
               check load
             </StatusButton>
             <span> {" >> "}</span>
-            <MainButton className="main" disabled={disabledStart}>
+            <MainButton
+              className="main"
+              disabled={disabledStart}
+              form="newFlight"
+              type="submit"
+            >
               schedule flight
             </MainButton>
           </div>
-          <form action="">
+          <form onSubmit={createNewFlight} id="newFlight">
             <ScheduleRocket
               selectedRocket={selectedRocket}
               setSelectedRocket={setSelectedRocket}
               setFuelForFlight={setFuelForFlight}
               durationSeconds={durationSeconds}
               setDurationSeconds={setDurationSeconds}
-              setCompletedParts={setCompletedParts}
-              completedParts={completedParts}
+              setCompletedParts={setPartSchedule}
+              completedParts={partSchedule}
+              distance={distance}
+              setDistance={setDistance}
+              name={name}
+              setName={setName}
+              setTakeOff={setTakeOff}
             />
 
             <Fuel

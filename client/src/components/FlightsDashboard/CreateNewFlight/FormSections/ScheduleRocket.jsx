@@ -11,12 +11,17 @@ function ScheduleRocket({
   setDurationSeconds,
   setCompletedParts,
   completedParts,
+  setDistance,
+  distance,
+  name,
+  setName,
+  setTakeOff,
 }) {
   const [notification, setNotification] = useState("");
-  const [name, setName] = useState("Over the moon");
+  // const [name, setName] = useState("Over the moon");
   const [time, setTime] = useState("12:15");
   const [date, setDate] = useState("2022-01-12");
-  const [distance, setDistance] = useState(3000000);
+
   const [touchdownDate, setTouchdownDate] = useState(null);
   const [touchdownTime, setTouchdownTime] = useState(null);
   const [rockets, setRockets] = useState([]);
@@ -25,12 +30,20 @@ function ScheduleRocket({
   const [durationMinutes, setDurationMinutes] = useState();
   const [durationDays, setDurationDays] = useState();
 
+  // parse take off time and date
+  useEffect(() => {
+    const timeDash = time.replace(":", "-");
+    setTakeOff(`${date}-${timeDash}`);
+  }, [time, date]);
+
   useEffect(() => {
     if (!name || !time || !date || !distance || !selectedRocket) {
-      setCompletedParts({ ...completedParts, schedule: false });
+      // setCompletedParts({ ...completedParts, schedule: false });
+      setCompletedParts(false);
       return setNotification("Fill out all the info");
     } else {
-      setCompletedParts({ ...completedParts, schedule: true });
+      // setCompletedParts({ ...completedParts, schedule: true });
+      setCompletedParts(true);
       setNotification("Schedule&Rocket OK");
     }
   }, [name, time, date, distance, selectedRocket, notification]);

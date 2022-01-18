@@ -7,6 +7,7 @@ import flightService from "../../services/flights";
 function Flights() {
   const [flights, setFlights] = useState([]);
 
+  console.log(flights);
   useEffect(() => {
     flightService.getAll().then((allFlights) => setFlights(allFlights));
     // const getAllFlights = async () => {

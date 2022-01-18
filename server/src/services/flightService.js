@@ -7,6 +7,7 @@ export const getAllFlights = () => {
   return flightsData;
 };
 
-export const addFlight = () => {
-  return null;
+export const addFlight = (newFlight) => {
+  flightsData.push(newFlight);
+  return newFlight;
 };
