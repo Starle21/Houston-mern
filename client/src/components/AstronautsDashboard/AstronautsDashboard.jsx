@@ -1,12 +1,17 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-import Title from "../CommonSignedIn/Title";
+import AllAstronauts from "./AllAstronauts";
+import CreateNewAstronaut from "./CreateNewAstronaut";
 
 function AstronautsDashboard() {
   return (
-    <div>
-      <Title title="Astronauts" />
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<AllAstronauts />} />
+        <Route path="/new" element={<CreateNewAstronaut />} />
+      </Routes>
+    </>
   );
 }
 

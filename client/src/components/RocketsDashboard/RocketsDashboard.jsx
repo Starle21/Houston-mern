@@ -1,12 +1,17 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-import Title from "../CommonSignedIn/Title";
+import AllRockets from "./AllRockets";
+import CreateNewRocket from "./CreateNewRocket";
 
 function RocketsDashboard() {
   return (
-    <div>
-      <Title title="Rockets" />
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<AllRockets />} />
+        <Route path="/new" element={<CreateNewRocket />} />
+      </Routes>
+    </>
   );
 }
 

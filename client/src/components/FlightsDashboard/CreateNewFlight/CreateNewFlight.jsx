@@ -10,6 +10,7 @@ import flightService from "../../../services/flights";
 
 // astronauts status was patchy - state updated in the following components from the old state object.. - redux should fix that
 // filter unchecked fasters out - they stay in the state
+// redirect on submit new flight
 
 function CreateNewFlight() {
   const [selectedRocket, setSelectedRocket] = useState();

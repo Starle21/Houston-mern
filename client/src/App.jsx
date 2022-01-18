@@ -19,8 +19,8 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="in" element={<SignedInUser />}>
         <Route path="flights/*" element={<FlightsDashboard />} />
-        <Route path="astronauts" element={<CosmonautsDashboard />} />
-        <Route path="rockets" element={<RocketsDashboard />} />
+        <Route path="astronauts/*" element={<CosmonautsDashboard />} />
+        <Route path="rockets/*" element={<RocketsDashboard />} />
       </Route>
     </Routes>
   );

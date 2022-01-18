@@ -1,5 +1,5 @@
 import React from "react";
-import DivideFlights from "../../DivideFlights";
+import DivideFlights from "../../../CommonSignedIn/DivideFlights";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import rocketService from "../../../../services/rockets";

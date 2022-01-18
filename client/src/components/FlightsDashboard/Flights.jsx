@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import DivideFlights from "./DivideFlights";
+import DivideFlights from "../CommonSignedIn/DivideFlights";
 import Flight from "./Flight";
 import flightService from "../../services/flights";
 
