@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 function Button(props) {
-  return <StyledButton>{props.children}</StyledButton>;
+  return <StyledButton color={props.color}>{props.children}</StyledButton>;
 }
 
 const StyledButton = styled.button`
@@ -11,7 +11,8 @@ const StyledButton = styled.button`
   font-weight: bold;
   border: none;
   cursor: pointer;
-  background-color: #f7931d;
+  /* background-color: #f7931d; */
+  background-color: ${(props) => props.color};
   padding: 0.4rem 0.7rem;
   color: white;
   border-radius: 0.5rem;

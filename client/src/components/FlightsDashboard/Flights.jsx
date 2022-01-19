@@ -8,9 +8,15 @@ import { getFlights } from "../../store/reducers/flightReducer";
 
 function Flights() {
   const dispatch = useDispatch();
-  const flights = useSelector((state) => state.flights);
+  // const flights = useSelector((state) => state.flights);
+  const flyingFlights = useSelector((state) =>
+    state.flights.filter((f) => f.status === "flying")
+  );
+  const scheduledFlights = useSelector((state) =>
+    state.flights.filter((f) => f.status === "scheduled")
+  );
 
-  console.log(flights);
+  // console.log(flights);
 
   // get flights on first render
   useEffect(() => {
@@ -19,11 +25,18 @@ function Flights() {
 
   return (
     <StyledFlights>
+      <DivideFlights>just landed</DivideFlights>
+      {/* {justLandedFlights.map((flight) => {
+        return <Flight key={flight.id} flight={flight} />;
+      })} */}
       <DivideFlights>current</DivideFlights>
-      {flights.map((flight) => {
+      {flyingFlights.map((flight) => {
         return <Flight key={flight.id} flight={flight} />;
       })}
       <DivideFlights>scheduled</DivideFlights>
+      {scheduledFlights.map((flight) => {
+        return <Flight key={flight.id} flight={flight} />;
+      })}
     </StyledFlights>
   );
 }

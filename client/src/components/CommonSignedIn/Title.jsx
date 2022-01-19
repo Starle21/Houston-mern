@@ -11,7 +11,7 @@ function Title({ title }) {
       <div className="borders">
         <div className="heading">
           <Link to={`/in/${link}/new`}>
-            <Button>+ new</Button>
+            <Button color="#f7931d">+ new</Button>
           </Link>
           <h1>{title}</h1>
         </div>

@@ -56,6 +56,12 @@ function ScheduleRocket({
     getAllRockets();
   }, []);
 
+  // [km, km/s, dateTime] : [dateTime]
+  const calcTouchDown = (distance, speed, takeOff) => {
+    const touchDown = takeOff + distance / speed;
+    return touchDown;
+  };
+
   // calculate touchdown
   useEffect(() => {
     if (!selectedRocket) return;

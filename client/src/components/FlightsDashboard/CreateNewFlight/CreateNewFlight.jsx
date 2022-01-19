@@ -54,8 +54,10 @@ function CreateNewFlight() {
       rocket: selectedRocket,
       //rocket current tank level
       //rocket current food level
+      // status: scheduled
       astronauts: selectedAstronauts,
       fasters: fasters,
+      createdBy: "Ben",
     };
     flightService.create(newFlight).then((res) => console.log(res));
     // console.log(newFlight);
