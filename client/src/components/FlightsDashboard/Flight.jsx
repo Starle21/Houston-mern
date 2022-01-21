@@ -6,10 +6,15 @@ import { IoRocketSharp } from "react-icons/io5";
 import { MdLocalGasStation } from "react-icons/md";
 import Button from "../Common/Button";
 
-function Flight({ flight }) {
+function Flight({ flight, socketRef }) {
   // const rocket = useSelector((state) =>
   //   state.rockets.filter((r) => r.id === `${flight.rocket}`)
   // );
+
+  const handleDestroy = () => {
+    socketRef.emit("destroy", flight);
+    console.log("client destroy");
+  };
 
   return (
     <StyledFlight>
@@ -67,7 +72,9 @@ function Flight({ flight }) {
           <label className="description">created by</label>
           <div className="data">Ben</div>
         </div>
-        {/* <Button color="#191e3b">details</Button> */}
+        <button color="#191e3b" onClick={handleDestroy}>
+          destroy
+        </button>
       </div>
     </StyledFlight>
   );
@@ -107,7 +114,6 @@ const StyledRange = styled.div`
     background-color: var(--input-bg);
     outline: none;
     position: relative;
-    cursor: pointer;
     border: 1px solid var(--seek-before-color);
   }
 
@@ -123,10 +129,6 @@ const StyledRange = styled.div`
     z-index: 1002;
   }
 
-  .progressBar:hover::before {
-    background-color: var(--seek-before-color-hovered);
-  }
-
   .progressBar::-webkit-slider-thumb {
     -webkit-appearance: none;
     height: 1rem;
@@ -134,9 +136,6 @@ const StyledRange = styled.div`
     background-color: var(--seek-before-color);
     z-index: 1005;
     box-sizing: border-box;
-  }
-  .progressBar:hover::-webkit-slider-thumb {
-    background-color: var(--selectedPlayhead);
   }
 `;
 

@@ -1,9 +1,14 @@
-import rocketsData from "../../data/rockets.js";
+const rocketsData = require("../../data/rockets.js");
 
-export const getAllRockets = () => {
+const getAllRockets = () => {
   return rocketsData;
 };
 
-export const addRocket = () => {
+const addRocket = () => {
   return null;
+};
+
+module.exports = {
+  getAllRockets,
+  addRocket,
 };

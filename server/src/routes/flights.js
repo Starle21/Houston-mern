@@ -1,5 +1,5 @@
-import express from "express";
-import * as flightService from "../services/flightService.js";
+const express = require("express");
+const flightService = require("../services/flightService.js");
 
 const flightsRouter = express.Router();
 
@@ -12,7 +12,11 @@ flightsRouter.get("/", (_req, res) => {
 flightsRouter.post("/", (_req, res) => {
   try {
     const newFlight = _req.body;
+    // add flight to database
     const addedFlight = flightService.addFlight(newFlight);
+
+    // startFlight() calls renderFlights()
+
     res.json(addedFlight);
   } catch (e) {
     res.status(400).send(e.message);
@@ -20,4 +24,4 @@ flightsRouter.post("/", (_req, res) => {
   // res.send("Creating a new flight!");
 });
 
-export default flightsRouter;
+module.exports = flightsRouter;

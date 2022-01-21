@@ -1,9 +1,14 @@
-import cosmonautsData from "../../data/cosmonauts.js";
+const astronautsData = require("../../data/astronauts.js");
 
-export const getAllAstronauts = () => {
-  return cosmonautsData;
+const getAllAstronauts = () => {
+  return astronautsData;
 };
 
-export const addAstronaut = () => {
+const addAstronaut = () => {
   return null;
+};
+
+module.exports = {
+  getAllAstronauts,
+  addAstronaut,
 };

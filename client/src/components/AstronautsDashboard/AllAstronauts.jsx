@@ -6,14 +6,30 @@ import DivideFlights from "../CommonSignedIn/DivideFlights";
 
 import Astronaut from "./Astronaut";
 
+import io from "socket.io-client";
+
 function AllAstronauts() {
   const [astronauts, setAstronauts] = useState([]);
+  const [currentData, setCurrentData] = useState();
 
-  console.log(astronauts);
+  console.log(currentData);
   useEffect(() => {
     astronautService
       .getAll()
       .then((allAstronauts) => setAstronauts(allAstronauts));
+  }, []);
+
+  useEffect(() => {
+    const socket = io("/");
+
+    socket.on("astronaut", (data) => {
+      // dispatch to redux
+      setCurrentData(data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (
@@ -21,7 +37,7 @@ function AllAstronauts() {
       <Title title="Astronauts" />
       <StyledRockets>
         {astronauts.map((astronaut) => {
-          return <Astronaut key={astronaut.id} astronaut={astronaut} />;
+          return <Astronaut key={astronaut.surname} astronaut={astronaut} />;
         })}
       </StyledRockets>
     </>

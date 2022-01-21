@@ -54,7 +54,7 @@ function CreateNewFlight() {
       rocket: selectedRocket,
       //rocket current tank level
       //rocket current food level
-      // status: scheduled
+      status: "scheduled",
       astronauts: selectedAstronauts,
       fasters: fasters,
       createdBy: "Ben",

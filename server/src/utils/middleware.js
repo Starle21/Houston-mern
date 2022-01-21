@@ -4,4 +4,4 @@ const unknownEndpoint = (request, response, next) => {
   next();
 };
 
-export default { unknownEndpoint };
+module.exports = { unknownEndpoint };

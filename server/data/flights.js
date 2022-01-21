@@ -1,19 +1,19 @@
-export default [
+module.exports = [
   {
     id: "01",
     name: "Over the moon",
-    takeOffTimeDate: "2022-01-18-10-55",
-    distance: 3000000,
+    takeOffTimeDate: "2022-01-20T18:55:00",
+    distance: 900000,
     rocket: "01",
     status: "flying",
   },
   {
     id: "02",
     name: "Step by step",
-    takeOffTimeDate: "2022-02-12-18-30",
+    takeOffTimeDate: "2022-01-19T01:30:00",
     distance: 5000000,
-    rocket: "01",
-    status: "scheduled",
+    rocket: "02",
+    status: "flying",
   },
   {
     id: "03",

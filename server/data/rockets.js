@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     id: "01",
     name: "Apollo 2022",
@@ -7,9 +7,9 @@ export default [
     load: 220,
     numberCrew: 3,
     tankCapacity: 2500000,
-    tankCurrentLevel: 300000,
+    tankLevelOnStart: 2490000,
     fridgeCapacity: 30,
-    foodCurrentLevel: 3,
+    foodLevelOnStart: 28,
   },
   {
     id: "02",
@@ -19,8 +19,8 @@ export default [
     load: 350,
     numberCrew: 5,
     tankCapacity: 4000000,
-    tankCurrentLevel: 400000,
+    tankLevelOnStart: 3990000,
     fridgeCapacity: 60,
-    foodCurrentLevel: 1,
+    foodLevelOnStart: 55,
   },
 ];

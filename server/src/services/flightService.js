@@ -1,13 +1,17 @@
-import flightsData from "../../data/flights.js";
+const flightsData = require("../../data/flights.js");
 
 // connecting to data stored localy
 // next step - connect to mongoDB
 
-export const getAllFlights = () => {
+const getAllFlights = () => {
   return flightsData;
 };
 
-export const addFlight = (newFlight) => {
+const addFlight = (newFlight) => {
   flightsData.push(newFlight);
   return newFlight;
+};
+module.exports = {
+  getAllFlights,
+  addFlight,
 };

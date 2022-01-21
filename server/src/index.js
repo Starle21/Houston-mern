@@ -1,33 +1,38 @@
-import express from "express";
-import cors from "cors";
-import flightsRouter from "./routes/flights.js";
-import astronautsRouter from "./routes/astronauts.js";
-import rocketsRouter from "./routes/rockets.js";
-import middleware from "./utils/middleware.js";
+const express = require("express");
+const cors = require("cors");
+const flightsRouter = require("./routes/flights.js");
+const astronautsRouter = require("./routes/astronauts.js");
+const rocketsRouter = require("./routes/rockets.js");
+const middleware = require("./utils/middleware.js");
+const { Server } = require("socket.io");
+const http = require("http");
 
-// creating server
+// creating req-res server
 const app = express();
 
 // pre middleware
 app.use(cors());
 app.use(express.json());
 
-// test route
-app.get("/api/ping", (_req, res) => {
-  console.log("someone pinged here");
-  res.send("Backend Houston pong");
-});
+// ---------------
+// create node.js server
+const server = http.createServer(app);
+// creating websockets server
+const io = new Server(server);
+
+// ---------------
 
 // routes
 app.use("/api/flights", flightsRouter);
 app.use("/api/astronauts", astronautsRouter);
 app.use("/api/rockets", rocketsRouter);
+app.use(require("./socket.js")(io));
 
 // post middleware
 app.use(middleware.unknownEndpoint);
 
 // turning server on
 const PORT = 3001;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
