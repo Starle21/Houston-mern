@@ -3,7 +3,7 @@
 // emit - takeoff
 // start to run the current data render engine
 // update distance, fuel, food
-const _abortedFlights = require("../helper");
+const Flights = require("../helper.js");
 
 const updateCurrentDistance = (speed, takeOff) => {
   const formatTakeOff = new Date(takeOff);
@@ -24,19 +24,19 @@ const updateCurrentFood = (flightDistance, distanceTravelled, foodOnStart) => {
 };
 
 const updateCurrentData = (flyingFlights, socket, io) => {
-  console.log("flying", socket.id);
+  // console.log("flying", socket.id);
   return flyingFlights.map((f) => {
     const distanceTravelled = updateCurrentDistance(
       f.rocket.speed,
       f.takeOffTimeDate
     );
-    console.log(distanceTravelled);
-    if (f.distance <= distanceTravelled) {
-      io.emit("land");
-      f.status = "landed";
-      console.log("landed", f);
-      console.log(distanceTravelled);
-    }
+    // console.log(distanceTravelled);
+    // if (f.distance <= distanceTravelled) {
+    //   io.emit("land");
+    //   f.status = "landed";
+    //   console.log("landed", f);
+    //   console.log(distanceTravelled);
+    // }
 
     const currentTankLevel = updateCurrentFuel(
       f.rocket.consumption,
@@ -62,15 +62,18 @@ const updateCurrentData = (flyingFlights, socket, io) => {
 };
 
 const renderFlights = (io, socket, flyingFlights) => {
-  console.log(_abortedFlights.aborted);
+  console.log("aborted", Flights.aborted);
+  console.log("all flights", Flights);
 
   let filteredFlights = flyingFlights;
-  if (_abortedFlights.aborted) {
-    filteredFlights = flyingFlights.filter(
-      (f) => f.name !== _abortedFlights.name
-    );
+  if (Flights.aborted) {
+    Flights.removeAbortedFlights();
+    filteredFlights = Flights.currentFlights;
   }
-  if (filteredFlights.length === 0) return;
+  if (filteredFlights.length === 0) {
+    Flights.stopRenderFlights();
+    return;
+  }
 
   const currentData = updateCurrentData(filteredFlights, socket, io);
   io.emit("currentData", currentData);
@@ -86,20 +89,6 @@ const renderFlights = (io, socket, flyingFlights) => {
   //   return;
   // }
 };
-
-// create new flight
-
-// start the flight on the take off time
-// setTimeout(() => {
-//   updateCurrentData(params);
-// }, takeOff - Date.now);
-
-// listen for destroyed events
-// update global destroyed variable
-// let destroyed = false;
-// socket.on("destroyed", () => {
-//   destroyed = true;
-// });
 
 // when the client signes in
 // when socket connection gets established

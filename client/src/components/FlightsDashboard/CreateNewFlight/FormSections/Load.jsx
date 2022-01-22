@@ -17,7 +17,7 @@ function Load({
     }, 0);
   };
 
-  const totalLoad = totalAstronautsWeight() + selectedRocket?.foodCurrentLevel;
+  const totalLoad = totalAstronautsWeight() + selectedRocket?.foodLevelOnStart;
 
   useEffect(() => {
     if (
@@ -44,7 +44,7 @@ function Load({
       <StyledFormSection>
         <div className="item calc">
           <label>Food weight</label>
-          <span>{selectedRocket?.foodCurrentLevel} kg</span>
+          <span>{selectedRocket?.foodLevelOnStart} kg</span>
         </div>
 
         <div>Astronauts weight:</div>

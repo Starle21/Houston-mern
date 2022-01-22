@@ -7,6 +7,7 @@ import SelectAstronauts from "./FormSections/SelectAstronauts";
 import CheckFood from "./FormSections/CheckFood";
 import Load from "./FormSections/Load";
 import flightService from "../../../services/flights";
+import { useNavigate } from "react-router-dom";
 
 // astronauts status was patchy - state updated in the following components from the old state object.. - redux should fix that
 // filter unchecked fasters out - they stay in the state
@@ -29,6 +30,7 @@ function CreateNewFlight() {
   const [distance, setDistance] = useState(3000000);
   const [name, setName] = useState("Over the moon");
   const [takeOff, setTakeOff] = useState("");
+  const navigate = useNavigate();
 
   // if all completed parts true, enable SCHEDULE FLIGHT button
   useEffect(() => {
@@ -59,7 +61,10 @@ function CreateNewFlight() {
       fasters: fasters,
       createdBy: "Ben",
     };
-    flightService.create(newFlight).then((res) => console.log(res));
+    flightService.create(newFlight).then((res) => {
+      navigate("/in/flights");
+      console.log(res);
+    });
     // console.log(newFlight);
   };
 

@@ -32,8 +32,7 @@ function ScheduleRocket({
 
   // parse take off time and date
   useEffect(() => {
-    const timeDash = time.replace(":", "-");
-    setTakeOff(`${date}-${timeDash}`);
+    setTakeOff(`${date}T${time}:00`);
   }, [time, date]);
 
   useEffect(() => {

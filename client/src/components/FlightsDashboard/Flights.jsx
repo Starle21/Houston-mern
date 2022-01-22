@@ -66,11 +66,13 @@ function Flights() {
       })} */}
       <DivideFlights>current</DivideFlights>
       {flyingFlights.map((flight) => {
-        return <Flight key={flight.id} flight={flight} socketRef={socketRef} />;
+        return (
+          <Flight key={flight.name} flight={flight} socketRef={socketRef} />
+        );
       })}
       <DivideFlights>scheduled</DivideFlights>
       {scheduledFlights.map((flight) => {
-        return <Flight key={flight.id} flight={flight} />;
+        return <Flight key={flight.name} flight={flight} />;
       })}
       <div className="last"></div>
     </StyledFlights>

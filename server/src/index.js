@@ -20,13 +20,15 @@ const server = http.createServer(app);
 // creating websockets server
 const io = new Server(server);
 
+app.set("io", io);
+
 // ---------------
 
 // routes
+app.use(require("./socket.js")(io));
 app.use("/api/flights", flightsRouter);
 app.use("/api/astronauts", astronautsRouter);
 app.use("/api/rockets", rocketsRouter);
-app.use(require("./socket.js")(io));
 
 // post middleware
 app.use(middleware.unknownEndpoint);
