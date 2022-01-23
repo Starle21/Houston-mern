@@ -2,6 +2,7 @@
 // ---------------
 const express = require("express");
 const Flights = require("./helper");
+const flightService = require("./services/flightService.js");
 
 // get current flights from db
 
@@ -12,20 +13,20 @@ module.exports = function (io) {
     console.log(`Client connected: ${socket.id}`);
 
     socket.on("flights:current", () => {
-      Flights.getCurrentFlightsFromDb();
-      Flights.getCurrentFlightsData(io, socket);
+      Flights.getCurrentFlightsFromDb(); //server
+      Flights.getCurrentFlightsData(io, socket); //client
     });
 
     socket.on("destroy", (flight) => {
       console.log("rocket has been destroyed!");
       Flights.abort(flight);
       io.emit("destroyed", flight);
-      // update database
-      //  - rocket destroyed
-      //  - flight aborted
+      flightService.removeFlight(flight);
+      // update database - rocket destroyed
     });
 
     socket.on("disconnect", () => {
+      Flights.stopRenderFlights();
       console.log(`Client disconnected: ${socket.id}`);
     });
   });

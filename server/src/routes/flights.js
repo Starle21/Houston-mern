@@ -17,11 +17,11 @@ flightsRouter.post("/", (_req, res) => {
     // add flight to database
     const addedFlight = flightService.addFlight(newFlight);
 
-    // startFlight() calls renderFlights() to render current data
     const takeOff = new Date(newFlight.takeOffTimeDate);
     const io = _req.app.get("io");
     setTimeout(() => {
       Flights.startFlight({ ...newFlight, status: "flying" }, io);
+      flightService.updateFlightStatus({ ...newFlight, status: "flying" });
     }, takeOff.getTime() - Date.now());
 
     res.json(addedFlight);

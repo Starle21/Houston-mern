@@ -12,6 +12,7 @@ function Flight({ flight, socketRef }) {
   // );
 
   const handleDestroy = () => {
+    console.log(socketRef);
     socketRef.emit("destroy", flight);
     console.log("client destroy");
   };

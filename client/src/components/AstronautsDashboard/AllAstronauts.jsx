@@ -12,7 +12,6 @@ function AllAstronauts() {
   const [astronauts, setAstronauts] = useState([]);
   const [currentData, setCurrentData] = useState();
 
-  console.log(currentData);
   useEffect(() => {
     astronautService
       .getAll()
@@ -20,16 +19,14 @@ function AllAstronauts() {
   }, []);
 
   useEffect(() => {
-    const socket = io("/");
-
-    socket.on("astronaut", (data) => {
-      // dispatch to redux
-      setCurrentData(data);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
+    // const socket = io("/");
+    // socket.on("astronaut", (data) => {
+    //   // dispatch to redux
+    //   setCurrentData(data);
+    // });
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
 
   return (

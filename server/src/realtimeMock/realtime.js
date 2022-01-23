@@ -22,20 +22,16 @@ const updateCurrentFood = (flightDistance, distanceTravelled, foodOnStart) => {
   return Number(foodRemaining.toFixed(1));
 };
 
-const updateCurrentData = (flyingFlights, socket, io) => {
+const updateCurrentData = (flyingFlights) => {
   // console.log("flying", socket.id);
   return flyingFlights.map((f) => {
     const distanceTravelled = updateCurrentDistance(
       f.rocket.speed,
       f.takeOffTimeDate
     );
-    // console.log(distanceTravelled);
-    // if (f.distance <= distanceTravelled) {
-    //   io.emit("land");
-    //   f.status = "landed";
-    //   console.log("landed", f);
-    //   console.log(distanceTravelled);
-    // }
+    if (f.distance <= distanceTravelled) {
+      f.status = "landed";
+    }
 
     const currentTankLevel = updateCurrentFuel(
       f.rocket.consumption,

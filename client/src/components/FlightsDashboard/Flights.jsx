@@ -48,7 +48,9 @@ function Flights() {
     socket.on("destroyed", () => {
       console.log("rocket destroyed!!!");
     });
-
+    socket.on("landed", () => {
+      console.log("flight has landed!!!");
+    });
     socket.emit("flights:current");
 
     return () => {
@@ -56,7 +58,7 @@ function Flights() {
     };
   }, []);
 
-  console.log(currentData);
+  console.log("2", currentData);
 
   return (
     <StyledFlights>

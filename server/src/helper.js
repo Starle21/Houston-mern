@@ -9,6 +9,7 @@ const Flights = (module.exports = {
     this.aborted = true;
     this.abortedFlights.push(flight);
   },
+  i: 0,
   abortedFlights: [],
   currentFlights: [],
   getCurrentFlightsFromDb() {
@@ -23,24 +24,23 @@ const Flights = (module.exports = {
       return { ...f, rocket: rocket };
     });
   },
-  setRun(status) {
-    this.run = status;
-  },
   getCurrentFlightsData(io, socket) {
     if (this.currentFlights.length > 0 && !this.run) {
-      this.renderFlights(io, socket);
       this.run = true;
+      this.renderFlights(io);
     }
   },
   stopRenderFlights() {
     this.run = false;
   },
   startFlight(flight, io) {
-    // const rockets = rocketService.getAllRockets();
-    // const rocket = rockets.filter((r) => r.id === flight.rocket)[0];
-    // const flightWithRocket = { ...flight, rocket: rocket };
-    // this.currentFlights.push(flightWithRocket);
-    this.currentFlights.push(flight);
+    if (this.run) {
+      this.currentFlights.push(flight); //server
+    } else {
+      this.currentFlights.push(flight);
+      this.renderFlights(io); //client
+      this.run = true;
+    }
     io.emit("flying", flight);
   },
   removeAbortedFlights() {
@@ -54,7 +54,13 @@ const Flights = (module.exports = {
     this.aborted = false;
     this.currentFlights = flightsUpdated;
   },
-  renderFlights(io, socket) {
+  removeLandedFlight(flight) {
+    const flightsUpdated = this.currentFlights.filter((f) => {
+      return f.name !== flight.name;
+    });
+    this.currentFlights = flightsUpdated;
+  },
+  renderFlights(io) {
     if (this.aborted) {
       this.removeAbortedFlights();
     }
@@ -62,23 +68,22 @@ const Flights = (module.exports = {
       this.stopRenderFlights();
       return;
     }
-    const currentData = updateCurrentData(this.currentFlights, socket, io);
-    io.emit("currentData", currentData);
-    setTimeout(() => this.renderFlights(io, socket), 2000);
+    if (!this.run) return;
+
+    const currentData = updateCurrentData(this.currentFlights);
+
+    this.i++;
+    // console.log("rendering...");
+
+    io.emit("currentData", { currentData, i: this.i });
+
+    if (currentData.some((f) => f.status === "landed")) {
+      const landedFlight = currentData.filter((f) => f.status === "landed")[0];
+      this.removeLandedFlight(landedFlight); //server
+      io.emit("landed", landedFlight); //client
+      flightService.removeFlight(landedFlight); //db
+    }
+
+    setTimeout(() => this.renderFlights(io), 2000);
   },
 });
-
-//   const currentData = updateCurrentData(filteredFlights, socket, io);
-//   io.emit("currentData", currentData);
-//   setTimeout(() => renderFlights(io, socket, filteredFlights), 2000);
-
-//   // when the flight gets back to earth
-//   // if (distanceTravelled === flightDistance) {
-//   //   socket.emit("landed", {
-//   //     id,
-//   //     flightName,
-//   //     status: "landed",
-//   //   });
-//   //   return;
-//   // }
-// };
