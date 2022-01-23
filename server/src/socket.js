@@ -12,13 +12,8 @@ module.exports = function (io) {
     console.log(`Client connected: ${socket.id}`);
 
     socket.on("flights:current", () => {
-      // if there are flying flights
-      // start the render - emit current data
-      // getFlightsFromDb
-      // renderFlights
       Flights.getCurrentFlightsFromDb();
       Flights.getCurrentFlightsData(io, socket);
-      // console.log(Flights.aborted);
     });
 
     socket.on("destroy", (flight) => {

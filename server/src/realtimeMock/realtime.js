@@ -3,7 +3,6 @@
 // emit - takeoff
 // start to run the current data render engine
 // update distance, fuel, food
-const Flights = require("../helper.js");
 
 const updateCurrentDistance = (speed, takeOff) => {
   const formatTakeOff = new Date(takeOff);
@@ -61,37 +60,37 @@ const updateCurrentData = (flyingFlights, socket, io) => {
   });
 };
 
-const renderFlights = (io, socket, flyingFlights) => {
-  console.log("aborted", Flights.aborted);
-  console.log("all flights", Flights);
+// const renderFlights = (io, socket, flyingFlights) => {
+//   console.log("aborted", Flights.aborted);
+//   console.log("all flights", Flights);
 
-  let filteredFlights = flyingFlights;
-  if (Flights.aborted) {
-    Flights.removeAbortedFlights();
-    filteredFlights = Flights.currentFlights;
-  }
-  if (filteredFlights.length === 0) {
-    Flights.stopRenderFlights();
-    return;
-  }
+//   let filteredFlights = flyingFlights;
+//   if (Flights.aborted) {
+//     Flights.removeAbortedFlights();
+//     filteredFlights = Flights.currentFlights;
+//   }
+//   if (filteredFlights.length === 0) {
+//     Flights.stopRenderFlights();
+//     return;
+//   }
 
-  const currentData = updateCurrentData(filteredFlights, socket, io);
-  io.emit("currentData", currentData);
-  setTimeout(() => renderFlights(io, socket, filteredFlights), 2000);
+//   const currentData = updateCurrentData(filteredFlights, socket, io);
+//   io.emit("currentData", currentData);
+//   setTimeout(() => renderFlights(io, socket, filteredFlights), 2000);
 
-  // when the flight gets back to earth
-  // if (distanceTravelled === flightDistance) {
-  //   socket.emit("landed", {
-  //     id,
-  //     flightName,
-  //     status: "landed",
-  //   });
-  //   return;
-  // }
-};
+//   // when the flight gets back to earth
+//   // if (distanceTravelled === flightDistance) {
+//   //   socket.emit("landed", {
+//   //     id,
+//   //     flightName,
+//   //     status: "landed",
+//   //   });
+//   //   return;
+//   // }
+// };
 
 // when the client signes in
 // when socket connection gets established
 // if (currentFlights) start up the mock rendering engine
 
-module.exports = { renderFlights };
+module.exports = { updateCurrentData };
