@@ -65,7 +65,7 @@ function CreateNewFlight() {
       navigate("/in/flights");
       console.log(res);
     });
-    // console.log(newFlight);
+    console.log(newFlight);
   };
 
   return (

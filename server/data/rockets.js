@@ -17,7 +17,7 @@ module.exports = [
     speed: 10,
     consumption: 0.9,
     load: 350,
-    numberCrew: 5,
+    numberCrew: 4,
     tankCapacity: 4000000,
     tankLevelForStart: 3990000,
     fridgeCapacity: 60,

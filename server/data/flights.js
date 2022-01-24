@@ -2,7 +2,7 @@ module.exports = [
   {
     id: "01",
     name: "Over the moon",
-    takeOffTimeDate: "2022-01-23T13:33:00",
+    takeOffTimeDate: "2022-01-23T14:49:00",
     distance: 900000,
     rocket: { id: "01" },
     status: "flying",
@@ -18,7 +18,7 @@ module.exports = [
   {
     id: "03",
     name: "Dream big",
-    takeOffTimeDate: "2022-04-30-15-00",
+    takeOffTimeDate: "2022-04-30T15:00:00",
     distance: 2000000,
     rocket: { id: "01" },
     status: "scheduled",

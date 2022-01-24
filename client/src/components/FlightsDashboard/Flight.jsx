@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { GiKnifeFork } from "react-icons/gi";
@@ -7,11 +7,13 @@ import { MdLocalGasStation } from "react-icons/md";
 import Button from "../Common/Button";
 
 function Flight({ flight, socketRef, data, state, landed }) {
+  console.log("flight comp", flight);
   const rocket = useSelector(
     (state) => state.rockets.filter((r) => r.id === `${flight.rocket.id}`)[0]
   );
   const componentRef = useRef();
   const notifyRef = useRef();
+  const [touchDown, setTouchDown] = useState();
 
   const borderColor = () => {
     if (landed) {
@@ -48,6 +50,24 @@ function Flight({ flight, socketRef, data, state, landed }) {
     }
   };
 
+  useEffect(() => {
+    if (rocket && flight) {
+      calcTouchDown(flight.distance, rocket.speed, flight.takeOffTimeDate);
+    }
+  }, [rocket, flight]);
+
+  const calcTouchDown = (distance, rocket, takeOff) => {
+    const durationSeconds = distance / rocket;
+    const takeOffTime = new Date(takeOff);
+    const takeOffTimeSeconds = takeOffTime.getTime() / 1000;
+    const touchDown = takeOffTimeSeconds + durationSeconds;
+    const touchDownTime = new Date(touchDown * 1000);
+    setTouchDown(touchDownTime);
+    console.log(durationSeconds);
+    console.log(touchDownTime.toLocaleTimeString());
+    console.log(touchDownTime.toLocaleDateString());
+  };
+
   return (
     <StyledFlight ref={componentRef}>
       <div className="healthStatus">
@@ -61,11 +81,23 @@ function Flight({ flight, socketRef, data, state, landed }) {
           <label className="description">name</label>
         </div>
         <div className="dataContainer">
-          <div className="data">{flight.takeOffTimeDate}</div>
+          <div className="data">
+            {new Date(flight.takeOffTimeDate).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}{" "}
+            {new Date(flight.takeOffTimeDate).toLocaleDateString()}
+          </div>
           <label className="description">take off</label>
         </div>
         <div className="dataContainer">
-          <div className="data">{flight.takeOffTimeDate}</div>
+          <div className="data">
+            {touchDown?.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}{" "}
+            {touchDown?.toLocaleDateString()}
+          </div>
           <label className="description">touch down</label>
         </div>
         <div className="dataContainer">
