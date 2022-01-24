@@ -3,9 +3,11 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import flightReducer from "./reducers/flightReducer";
+import rocketReducer from "./reducers/rocketReducer";
 
 const reducer = combineReducers({
   flights: flightReducer,
+  rockets: rocketReducer,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

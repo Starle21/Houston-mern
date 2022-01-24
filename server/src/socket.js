@@ -12,7 +12,7 @@ module.exports = function (io) {
   io.on("connection", (socket) => {
     console.log(`Client connected: ${socket.id}`);
 
-    socket.on("flights:current", () => {
+    socket.on("flights:getCurrent", () => {
       Flights.getCurrentFlightsFromDb(); //server
       Flights.getCurrentFlightsData(io, socket); //client
     });

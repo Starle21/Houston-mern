@@ -4,6 +4,6 @@ MERN version, build with:
 
 - React Hooks
 - Redux
-- Axios
+- Axios, Socket.IO
 - Node, Express
 - MongoDB, Mongoose

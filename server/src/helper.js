@@ -20,7 +20,7 @@ const Flights = (module.exports = {
     const rockets = rocketService.getAllRockets();
 
     this.currentFlights = flyingFlights.map((f) => {
-      const rocket = rockets.filter((r) => r.id === f.rocket)[0];
+      const rocket = rockets.filter((r) => r.id === f.rocket.id)[0];
       return { ...f, rocket: rocket };
     });
   },
@@ -41,7 +41,7 @@ const Flights = (module.exports = {
       this.renderFlights(io); //client
       this.run = true;
     }
-    io.emit("flying", flight);
+    io.emit("flight:takeOff", flight);
   },
   removeAbortedFlights() {
     const flightsUpdated = this.currentFlights.filter((f) => {
@@ -75,12 +75,12 @@ const Flights = (module.exports = {
     this.i++;
     // console.log("rendering...");
 
-    io.emit("currentData", { currentData, i: this.i });
+    io.emit("flights:currentData", currentData);
 
     if (currentData.some((f) => f.status === "landed")) {
       const landedFlight = currentData.filter((f) => f.status === "landed")[0];
       this.removeLandedFlight(landedFlight); //server
-      io.emit("landed", landedFlight); //client
+      io.emit("flight:landed", landedFlight); //client
       flightService.removeFlight(landedFlight); //db
     }
 

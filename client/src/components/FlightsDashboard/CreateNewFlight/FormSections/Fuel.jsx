@@ -14,7 +14,7 @@ function Fuel({
   //   set notifications
   useEffect(() => {
     if (!selectedRocket) return setNotification("No rocket selected");
-    if (selectedRocket.tankLevelOnStart < fuelForFlight) {
+    if (selectedRocket.tankLevelForStart < fuelForFlight) {
       setCompletedParts({ ...completedParts, fuel: false });
       setNotification("not enough fuel");
     }
@@ -23,13 +23,16 @@ function Fuel({
       setNotification("too small a tank");
     }
     if (
-      fuelForFlight <= selectedRocket.tankLevelOnStart &&
+      fuelForFlight <= selectedRocket.tankLevelForStart &&
       fuelForFlight < selectedRocket.tankCapacity
     ) {
       setCompletedParts({ ...completedParts, fuel: true });
       setNotification("Fuel part ok");
     }
-    if (selectedRocket.tankLevelOnStart > fuelForFlight + fuelForFlight * 0.1) {
+    if (
+      selectedRocket.tankLevelForStart >
+      fuelForFlight + fuelForFlight * 0.1
+    ) {
       setCompletedParts({ ...completedParts, fuel: false });
       setNotification("Take fuel out");
     }
@@ -46,10 +49,13 @@ function Fuel({
     }
     if (volume > selectedRocket.tankCapacity) {
       setCompletedParts({ ...completedParts, fuel: true });
-      setSelectedRocket({ ...selectedRocket, tankLevelOnStart: fuelForFlight });
+      setSelectedRocket({
+        ...selectedRocket,
+        tankLevelForStart: fuelForFlight,
+      });
     } else {
       setCompletedParts({ ...completedParts, fuel: true });
-      setSelectedRocket({ ...selectedRocket, tankLevelOnStart: volume });
+      setSelectedRocket({ ...selectedRocket, tankLevelForStart: volume });
     }
 
     // add local fuel
@@ -63,7 +69,7 @@ function Fuel({
     e.preventDefault();
     setSelectedRocket({
       ...selectedRocket,
-      tankLevelOnStart: fuelForFlight + fuelForFlight * 0.1,
+      tankLevelForStart: fuelForFlight + fuelForFlight * 0.1,
     });
   };
 
@@ -96,7 +102,7 @@ function Fuel({
           <div className="addFuel">
             {" "}
             {selectedRocket
-              ? `${selectedRocket.tankLevelOnStart} l`
+              ? `${selectedRocket.tankLevelForStart} l`
               : "select rocket first"}
             <button onClick={addFuel}> add fuel</button>
             <button onClick={removeFuel}> remove fuel</button>

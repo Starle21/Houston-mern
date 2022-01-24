@@ -28,11 +28,11 @@ function CheckFood({
       setCompletedParts(part);
       return setNotification("Too small a fridge!");
     }
-    if (totalFood() < selectedRocket.foodLevelOnStart) {
+    if (totalFood() < selectedRocket.foodLevelForStart) {
       setCompletedParts({ ...completedParts, food: false });
       return setNotification("Take food out");
     }
-    if (totalFood() > selectedRocket.foodLevelOnStart) {
+    if (totalFood() > selectedRocket.foodLevelForStart) {
       setCompletedParts({ ...completedParts, food: false });
       return setNotification("Not enough food");
     }
@@ -42,7 +42,7 @@ function CheckFood({
 
   const placeRequiredFood = (e) => {
     e.preventDefault();
-    setSelectedRocket({ ...selectedRocket, foodLevelOnStart: totalFood() });
+    setSelectedRocket({ ...selectedRocket, foodLevelForStart: totalFood() });
   };
 
   const totalFoodPerHour = () => {
@@ -104,7 +104,7 @@ function CheckFood({
           <label>Current food level</label>
           <div className="addFood">
             {selectedRocket
-              ? `${selectedRocket.foodLevelOnStart} kg`
+              ? `${selectedRocket.foodLevelForStart} kg`
               : "select rocket first"}
             <button onClick={placeRequiredFood}>set required food</button>
           </div>

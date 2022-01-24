@@ -4,7 +4,11 @@ import DivideFlights from "../CommonSignedIn/DivideFlights";
 import Flight from "./Flight";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getFlights } from "../../store/reducers/flightReducer";
+import {
+  getFlights,
+  updateFlightStatus,
+} from "../../store/reducers/flightReducer";
+import { getRockets } from "../../store/reducers/rocketReducer";
 
 import io from "socket.io-client";
 
@@ -19,57 +23,87 @@ function Flights() {
   const scheduledFlights = useSelector((state) =>
     state.flights.filter((f) => f.status === "scheduled")
   );
-  const [currentData, setCurrentData] = useState();
+  const [currentData, setCurrentData] = useState([]);
   const [socketRef, setSocketRef] = useState();
+  const [aborted, setAborted] = useState();
+  const [landed, setLanded] = useState();
 
   // console.log(flights);
 
-  // get flights on first render
+  // get flights on first render from db
   useEffect(() => {
     dispatch(getFlights());
+    dispatch(getRockets());
   }, []);
 
-  // connecting to ws server
-  // receiving emitted data from the server
-  // updating state with the received data
   // updating status of flights - scheduled, flying, landed, just landed, cancelled, destroyed
   // rendering the progress - distance traveled, current fuel, current food
   useEffect(() => {
     const socket = io("/");
-    console.log(socket);
 
-    // receive - get from server - listen for an event
-    socket.on("currentData", (data) => {
-      // dispatch to redux
+    // msg to server - start to send current data
+    socket.emit("flights:getCurrent");
+
+    // render distance, food, fuel
+    socket.on("flights:currentData", (data) => {
       setCurrentData(data);
       setSocketRef(socket);
     });
 
-    socket.on("destroyed", () => {
+    // change color to red, remove after timeout from current
+    socket.on("destroyed", (flight) => {
+      setAborted(flight);
+      setTimeout(() => {
+        dispatch(updateFlightStatus(flight.name, "aborted"));
+        // remove rocket from the state
+        setAborted("");
+      }, 10000);
       console.log("rocket destroyed!!!");
     });
-    socket.on("landed", () => {
+
+    // change color to green, timeout after a while
+    socket.on("flight:landed", (flight) => {
+      setLanded(flight);
+      setTimeout(() => {
+        dispatch(updateFlightStatus(flight.name, "landed"));
+        setLanded("");
+      }, 10000);
       console.log("flight has landed!!!");
     });
-    socket.emit("flights:current");
+
+    // move from scheduled to current
+    socket.on("flight:takeOff", (flight) => {
+      dispatch(updateFlightStatus(flight.name, "flying"));
+      console.log("flight has just took off!!!");
+    });
 
     return () => {
       socket.disconnect();
     };
   }, []);
 
-  console.log("2", currentData);
+  // console.log("2", currentData);
+  // console.log("2", flyingFlights);
 
   return (
     <StyledFlights>
-      <DivideFlights>just landed</DivideFlights>
-      {/* {justLandedFlights.map((flight) => {
-        return <Flight key={flight.id} flight={flight} />;
-      })} */}
       <DivideFlights>current</DivideFlights>
       {flyingFlights.map((flight) => {
+        const currentDatum = currentData?.filter(
+          (d) => d.name === flight.name
+        )[0];
+        const state = flight.name === aborted?.name ? true : false;
+        const hasLanded = flight.name === landed?.name ? true : false;
+
         return (
-          <Flight key={flight.name} flight={flight} socketRef={socketRef} />
+          <Flight
+            key={flight.name}
+            flight={flight}
+            socketRef={socketRef}
+            data={currentDatum}
+            state={state}
+            landed={hasLanded}
+          />
         );
       })}
       <DivideFlights>scheduled</DivideFlights>
