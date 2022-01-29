@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // import DivideFlights from "../DivideFlights";
-import ScheduleRocket from "./FormSections/ScheduleRocket";
+import ScheduleRocket from "./FormSections/ScheduleRocket/ScheduleRocket";
 import Fuel from "./FormSections/Fuel";
 import SelectAstronauts from "./FormSections/SelectAstronauts";
 import CheckFood from "./FormSections/CheckFood";
@@ -13,7 +13,19 @@ import { useNavigate } from "react-router-dom";
 // filter unchecked fasters out - they stay in the state
 // redirect on submit new flight
 
+import { useDispatch, useSelector } from "react-redux";
+import { initNewFlight } from "../../../store/reducers/newFlightReducer";
+
 function CreateNewFlight() {
+  const dispatch = useDispatch();
+  const newFlight = useSelector((state) => state.newFlight);
+
+  useEffect(() => {
+    dispatch(initNewFlight());
+  }, []);
+
+  console.log(newFlight);
+
   const [selectedRocket, setSelectedRocket] = useState();
   const [fuelForFlight, setFuelForFlight] = useState([]);
   const [selectedAstronauts, setSelectedAstronauts] = useState([]);
@@ -47,13 +59,14 @@ function CreateNewFlight() {
     }
   }, [completedParts, partAstronauts, partSchedule]);
 
+  // schedule new flight handler
   const createNewFlight = (e) => {
     e.preventDefault();
     const newFlight = {
       name: name,
-      takeOffTimeDate: takeOff,
       distance: distance,
       rocket: selectedRocket,
+      takeOffTimeDate: takeOff,
       //rocket current tank level
       //rocket current food level
       status: "scheduled",

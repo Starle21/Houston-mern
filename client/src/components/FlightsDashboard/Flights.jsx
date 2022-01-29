@@ -16,7 +16,6 @@ import io from "socket.io-client";
 
 function Flights() {
   const dispatch = useDispatch();
-  // const flights = useSelector((state) => state.flights);
   const flyingFlights = useSelector((state) =>
     state.flights.filter((f) => f.status === "flying")
   );
@@ -27,8 +26,6 @@ function Flights() {
   const [socketRef, setSocketRef] = useState();
   const [aborted, setAborted] = useState();
   const [landed, setLanded] = useState();
-
-  // console.log(flights);
 
   // get flights on first render from db
   useEffect(() => {
@@ -44,13 +41,11 @@ function Flights() {
     // msg to server - start to send current data
     socket.emit("flights:getCurrent");
 
-    // render distance, food, fuel
     socket.on("flights:currentData", (data) => {
       setCurrentData(data);
       setSocketRef(socket);
     });
 
-    // change color to red, remove after timeout from current
     socket.on("destroyed", (flight) => {
       setAborted(flight);
       setTimeout(() => {
@@ -61,7 +56,6 @@ function Flights() {
       console.log("rocket destroyed!!!");
     });
 
-    // change color to green, timeout after a while
     socket.on("flight:landed", (flight) => {
       setLanded(flight);
       setTimeout(() => {
@@ -71,7 +65,6 @@ function Flights() {
       console.log("flight has landed!!!");
     });
 
-    // move from scheduled to current
     socket.on("flight:takeOff", (flight) => {
       dispatch(updateFlightStatus(flight.name, "flying"));
       console.log("flight has just took off!!!");
@@ -81,9 +74,6 @@ function Flights() {
       socket.disconnect();
     };
   }, []);
-
-  // console.log("2", currentData);
-  // console.log("2", flyingFlights);
 
   return (
     <StyledFlights>
