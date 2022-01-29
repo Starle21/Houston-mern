@@ -38,6 +38,7 @@ export const updateNewFlight = (key, state) => {
 };
 
 export const allowStart = (part, key, state) => {
+  console.log(part, key, state);
   return async (dispatch) => {
     dispatch({
       type: "ALLOW_START",

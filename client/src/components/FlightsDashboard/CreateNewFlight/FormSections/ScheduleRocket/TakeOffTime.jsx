@@ -17,10 +17,10 @@ function TakeOffTimeDate() {
   useEffect(() => {
     if (!time || !date) {
       dispatch(setNotification("schedule", "Fill out date and time"));
-      dispatch(allowStart("schedule", "takeOffTimeDate", false));
+      // dispatch(allowStart("schedule", "takeOffTimeDate", false));
     } else {
       dispatch(setNotification("schedule", ""));
-      dispatch(allowStart("schedule", "takeOffTimeDate", true));
+      // dispatch(allowStart("schedule", "takeOffTimeDate", true));
     }
   }, [date, time]);
 
