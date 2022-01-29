@@ -21,11 +21,7 @@ function Name() {
     dispatch(getFlights());
   }, []);
 
-  // name change handler with validation
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-    dispatch(updateNewFlight("name", value));
-
+  const checkFormat = (value) => {
     if (allFlights.some((f) => f === value)) {
       dispatch(setNotification("schedule", "Name must be unique"));
       dispatch(allowStart("schedule", "name", false));
@@ -38,6 +34,14 @@ function Name() {
       dispatch(setNotification("schedule", ""));
       dispatch(allowStart("schedule", "name", true));
     }
+  };
+
+  // name change handler with validation
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    dispatch(updateNewFlight("name", value));
+
+    checkFormat(value);
   };
 
   return (

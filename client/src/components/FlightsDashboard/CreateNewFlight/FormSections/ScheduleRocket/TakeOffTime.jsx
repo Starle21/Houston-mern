@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { updateNewFlight } from "../../../../../store/reducers/newFlightReducer";
+import {
+  updateNewFlight,
+  allowStart,
+} from "../../../../../store/reducers/newFlightReducer";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
 
 function TakeOffTimeDate() {
@@ -10,20 +13,25 @@ function TakeOffTimeDate() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
 
+  // check format
   useEffect(() => {
     if (!time || !date) {
       dispatch(setNotification("schedule", "Fill out date and time"));
+      dispatch(allowStart("schedule", "takeOffTimeDate", false));
     } else {
-      dispatch(setNotification("schedule", "Date time ok"));
+      dispatch(setNotification("schedule", ""));
+      dispatch(allowStart("schedule", "takeOffTimeDate", true));
     }
   }, [date, time]);
 
+  // handle change to redux
   useEffect(() => {
     if (!time || !date) return;
     const value = new Date(`${date}T${time}:00`).toISOString();
     dispatch(updateNewFlight("takeOffTimeDate", value));
   }, [date, time]);
 
+  // not allow selecting today and past days
   const disablePast = () => {
     const now = new Date(Date.now());
     const year = now.getFullYear();
