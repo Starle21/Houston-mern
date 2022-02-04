@@ -103,6 +103,8 @@ function ScheduleRocket({
     setFuelForFlight(distance * selectedRocket.consumption);
   }, [selectedRocket, distance]);
 
+  console.log(newFlight.completed?.schedule);
+
   return (
     <>
       <DivideFlights>schedule&rocket</DivideFlights>
@@ -130,11 +132,25 @@ function ScheduleRocket({
         <TouchDown />
         <Duration />
         {/* <div className="notification">{notification}</div> */}
-        <div className="notification">{notify}</div>
+        <StyledNotification color={newFlight.completed?.schedule}>
+          {notify}
+        </StyledNotification>
       </StyledFormSection>
     </>
   );
 }
+
+const StyledNotification = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 6rem;
+  padding: 1rem 0;
+  align-self: center;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  background-color: ${(props) => (props.color ? "#61b66c" : "#be1e2d")};
+`;
 
 const StyledFormSection = styled.div`
   display: flex;
@@ -167,9 +183,6 @@ const StyledFormSection = styled.div`
   }
 
   .notification {
-    margin-top: 1rem;
-    align-self: center;
-    height: 7rem;
   }
 `;
 
