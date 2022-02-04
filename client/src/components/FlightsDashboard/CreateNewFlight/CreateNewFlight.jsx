@@ -21,6 +21,11 @@ function CreateNewFlight() {
   const newFlight = useSelector((state) => state.newFlight);
 
   useEffect(() => {
+    console.log("init");
+    // async function init() {
+    //   await dispatch(initNewFlight());
+    // }
+    // init();
     dispatch(initNewFlight());
   }, []);
 

@@ -7,7 +7,13 @@ const initialProps = {
   distance: "",
   rocket: {},
   takeOffTimeDate: "",
-  allowStart: { schedule: {}, fuel: {}, food: {}, astronauts: {}, load: {} },
+  allowStart: {
+    schedule: { name: false, takeOffTimeDate: false },
+    fuel: {},
+    food: {},
+    astronauts: {},
+    load: {},
+  },
 };
 // action creators
 export const initNewFlight = () => {
@@ -38,7 +44,6 @@ export const updateNewFlight = (key, state) => {
 };
 
 export const allowStart = (part, key, state) => {
-  console.log(part, key, state);
   return async (dispatch) => {
     dispatch({
       type: "ALLOW_START",

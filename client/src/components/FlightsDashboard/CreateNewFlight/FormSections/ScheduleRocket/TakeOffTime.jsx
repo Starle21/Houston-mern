@@ -13,17 +13,6 @@ function TakeOffTimeDate() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
 
-  // check format
-  useEffect(() => {
-    if (!time || !date) {
-      dispatch(setNotification("schedule", "Fill out date and time"));
-      // dispatch(allowStart("schedule", "takeOffTimeDate", false));
-    } else {
-      dispatch(setNotification("schedule", ""));
-      // dispatch(allowStart("schedule", "takeOffTimeDate", true));
-    }
-  }, [date, time]);
-
   // handle change to redux
   useEffect(() => {
     if (!time || !date) return;
@@ -31,28 +20,46 @@ function TakeOffTimeDate() {
     dispatch(updateNewFlight("takeOffTimeDate", value));
   }, [date, time]);
 
+  const checkFormat = () => {
+    if (!time || !date || (date && !time) || (!date && time)) {
+      dispatch(setNotification("schedule", "Fill out date and time"));
+      dispatch(allowStart("schedule", "takeOffTimeDate", false));
+    } else {
+      dispatch(setNotification("schedule", ""));
+      dispatch(allowStart("schedule", "takeOffTimeDate", true));
+    }
+  };
+
   // not allow selecting today and past days
   const disablePast = () => {
     const now = new Date(Date.now());
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
     const day = now.getDate() + 1;
-    return `${year}-${month < 10 ? `0${month}` : month}-${day}`;
+    return `${year}-${month < 10 ? `0${month}` : month}-${
+      day < 10 ? `0${day}` : day
+    }`;
+  };
+
+  const handleFocus = () => {
+    checkFormat();
   };
 
   return (
     <StyledTakeOff>
       <label>Time of take off:</label>
       <div className="timeDateContainer">
-        <input
+        <StyledInput
           className="time"
           type="time"
           value={time}
           onChange={(e) => {
             setTime(e.target.value);
           }}
+          allowed={time !== "" ? true : false}
+          onFocus={handleFocus}
         />
-        <input
+        <StyledInput
           className="date"
           type="date"
           value={date}
@@ -60,11 +67,30 @@ function TakeOffTimeDate() {
             setDate(e.target.value);
           }}
           min={disablePast()}
+          allowed={date !== "" ? true : false}
+          onFocus={handleFocus}
         />
       </div>
     </StyledTakeOff>
   );
 }
+
+const StyledInput = styled.input`
+  padding: 8px;
+  border: ${(props) =>
+    props.allowed ? "1px solid #fff6ee" : "1px solid #be1e2d"};
+  background-color: #fff6ee;
+  font-family: "JohnSans Lite Pro";
+  font-size: 15px;
+  border-radius: 5px;
+  width: 300px;
+  flex-basis: 50%;
+
+  &:focus {
+    outline: ${(props) =>
+      props.allowed ? "2px solid #fccda5" : "1px solid #be1e2d"};
+  }
+`;
 
 const StyledTakeOff = styled.div`
   display: flex;
@@ -81,7 +107,7 @@ const StyledTakeOff = styled.div`
     gap: 0.1rem;
   }
 
-  input[type="time"],
+  /* input[type="time"],
   input[type="date"] {
     padding: 10px;
     border: 0;
@@ -91,7 +117,7 @@ const StyledTakeOff = styled.div`
 
     border-radius: 5px;
     flex-basis: 50%;
-  }
+  } */
 `;
 
 export default TakeOffTimeDate;

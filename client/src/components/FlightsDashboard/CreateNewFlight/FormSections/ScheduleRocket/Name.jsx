@@ -52,6 +52,7 @@ function Name() {
     checkFormat(value);
   };
 
+  // when clicking on the input validate
   const handleFocus = (e) => {
     const value = e.target.value;
     checkFormat(value);
