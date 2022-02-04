@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -8,10 +13,17 @@ import {
 } from "../../../../../store/reducers/newFlightReducer";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
 
-function TakeOffTimeDate() {
+const TakeOffTimeDate = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
+
+  useImperativeHandle(ref, () => {
+    return {
+      key: "takeOffTimeDate",
+      checkFormat,
+    };
+  });
 
   // handle change to redux
   useEffect(() => {
@@ -20,7 +32,7 @@ function TakeOffTimeDate() {
     dispatch(updateNewFlight("takeOffTimeDate", value));
   }, [date, time]);
 
-  const checkFormat = () => {
+  const checkFormat = (value) => {
     if (!time || !date || (date && !time) || (!date && time)) {
       dispatch(setNotification("schedule", "Fill out date and time"));
       dispatch(allowStart("schedule", "takeOffTimeDate", false));
@@ -41,7 +53,7 @@ function TakeOffTimeDate() {
     }`;
   };
 
-  const handleFocus = () => {
+  const handleFocus = (e) => {
     checkFormat();
   };
 
@@ -73,7 +85,7 @@ function TakeOffTimeDate() {
       </div>
     </StyledTakeOff>
   );
-}
+});
 
 const StyledInput = styled.input`
   padding: 8px;
@@ -83,7 +95,6 @@ const StyledInput = styled.input`
   font-family: "JohnSans Lite Pro";
   font-size: 15px;
   border-radius: 5px;
-  width: 300px;
   flex-basis: 50%;
 
   &:focus {
@@ -102,7 +113,7 @@ const StyledTakeOff = styled.div`
   position: relative;
 
   .timeDateContainer {
-    width: 320px;
+    width: 322px;
     display: flex;
     gap: 0.1rem;
   }

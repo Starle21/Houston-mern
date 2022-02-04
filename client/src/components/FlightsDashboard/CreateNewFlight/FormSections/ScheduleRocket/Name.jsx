@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import {
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
 import { getFlights } from "../../../../../store/reducers/flightReducer";
 
-function Name() {
+const Name = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.newFlight.name);
   const allFlights = useSelector((state) =>
@@ -23,6 +23,13 @@ function Name() {
   useEffect(() => {
     dispatch(getFlights());
   }, []);
+
+  useImperativeHandle(ref, () => {
+    return {
+      key: "name",
+      checkFormat,
+    };
+  });
 
   // validate the data
   const checkFormat = (value) => {
@@ -71,7 +78,7 @@ function Name() {
       />
     </StyledName>
   );
-}
+});
 
 const StyledInput = styled.input`
   padding: 10px;

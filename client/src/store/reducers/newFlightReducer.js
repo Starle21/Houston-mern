@@ -8,11 +8,22 @@ const initialProps = {
   rocket: {},
   takeOffTimeDate: "",
   allowStart: {
-    schedule: { name: false, takeOffTimeDate: false },
+    schedule: {
+      name: false,
+      takeOffTimeDate: false,
+      distance: false,
+      rocket: false,
+    },
     fuel: {},
     food: {},
     astronauts: {},
     load: {},
+  },
+  completed: {
+    schedule: false,
+    fuel: false,
+    food: false,
+    astronauts: false,
   },
 };
 // action creators
@@ -52,6 +63,15 @@ export const allowStart = (part, key, state) => {
   };
 };
 
+export const setCompleted = (part, state) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "SET_COMPLETED",
+      data: { part, state },
+    });
+  };
+};
+
 // reducer
 const newFlightReducer = (state = {}, action) => {
   switch (action.type) {
@@ -74,6 +94,16 @@ const newFlightReducer = (state = {}, action) => {
             ...state.allowStart[action.data.part],
             [action.data.key]: action.data.state,
           },
+        },
+      };
+      return updated;
+    }
+    case "SET_COMPLETED": {
+      const updated = {
+        ...state,
+        completed: {
+          ...state.completed,
+          [action.data.part]: action.data.state,
         },
       };
       return updated;

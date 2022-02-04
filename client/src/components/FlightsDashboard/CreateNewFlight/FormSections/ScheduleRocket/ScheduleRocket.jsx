@@ -1,11 +1,12 @@
 import React from "react";
 import DivideFlights from "../../../../CommonSignedIn/DivideFlights";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import rocketService from "../../../../../services/rockets";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
+import { setCompleted } from "../../../../../store/reducers/newFlightReducer";
 
 import Name from "./Name";
 import Distance from "./Distance";
@@ -22,6 +23,7 @@ function ScheduleRocket({
   distance,
   name,
 }) {
+  const validateRef = useRef([]);
   const dispatch = useDispatch();
   const notify = useSelector((state) => state.notification.schedule);
   const newFlight = useSelector((state) => state.newFlight);
@@ -48,6 +50,42 @@ function ScheduleRocket({
     dispatch(setNotification("schedule", "fill out all the info"));
   }, []);
 
+  // if allowed find false true
+  // run check function from that component
+
+  // if allowed find false false
+  // set completed true
+  useEffect(() => {
+    if (!newFlight.allowStart?.schedule) return;
+    if (!validateRef.current) return;
+
+    const entries = [];
+    Object.entries(newFlight.allowStart.schedule).forEach(([key, value]) => {
+      if (value === false) {
+        entries.push(key);
+        return;
+      }
+    });
+
+    if (entries.length === 0) {
+      dispatch(setCompleted("schedule", true));
+      dispatch(setNotification("schedule", "schedule&rocket ok"));
+    } else if (notify === "" && entries.length !== 0) {
+      dispatch(setCompleted("schedule", false));
+      dispatch(setNotification("schedule", "fill out all the info"));
+
+      // const index = validateRef.current
+      //   .map((el, index) => {
+      //     if (el.key === entries[0]) return index;
+      //     else return null;
+      //   })
+      //   .filter((el) => el !== null)[0];
+      // validateRef.current[index].checkFormat(newFlight[entries[0]]);
+    } else {
+      dispatch(setCompleted("schedule", false));
+    }
+  }, [newFlight.allowStart?.schedule]);
+
   // useEffect(() => {
   //   if (!name || !time || !date || !distance || !selectedRocket) {
   //     // setCompletedParts({ ...completedParts, schedule: false });
@@ -69,10 +107,26 @@ function ScheduleRocket({
     <>
       <DivideFlights>schedule&rocket</DivideFlights>
       <StyledFormSection>
-        <Name />
-        <TakeOffTimeDate />
-        <Distance />
-        <Rocket />
+        <Name
+          ref={(element) => {
+            validateRef.current[0] = element;
+          }}
+        />
+        <TakeOffTimeDate
+          ref={(element) => {
+            validateRef.current[1] = element;
+          }}
+        />
+        <Distance
+          ref={(element) => {
+            validateRef.current[2] = element;
+          }}
+        />
+        <Rocket
+          ref={(element) => {
+            validateRef.current[3] = element;
+          }}
+        />
         <TouchDown />
         <Duration />
         {/* <div className="notification">{notification}</div> */}
@@ -115,6 +169,7 @@ const StyledFormSection = styled.div`
   .notification {
     margin-top: 1rem;
     align-self: center;
+    height: 7rem;
   }
 `;
 

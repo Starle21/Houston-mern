@@ -19,6 +19,9 @@ import { initNewFlight } from "../../../store/reducers/newFlightReducer";
 function CreateNewFlight() {
   const dispatch = useDispatch();
   const newFlight = useSelector((state) => state.newFlight);
+  const isPartScheduleComplete = useSelector(
+    (state) => state.newFlight.completed?.schedule
+  );
 
   useEffect(() => {
     console.log("init");
@@ -97,7 +100,7 @@ function CreateNewFlight() {
           <div className="statusBar">
             <span> {">> "} </span>
 
-            <StatusButton className="statusBtn" filled={partSchedule}>
+            <StatusButton className="statusBtn" filled={isPartScheduleComplete}>
               schedule&rocket
             </StatusButton>
 
@@ -232,6 +235,7 @@ const StyledNewFlight = styled.div`
     align-items: baseline;
 
     position: sticky;
+    z-index: 50;
 
     padding-top: 25px;
     padding-bottom: 20px;
