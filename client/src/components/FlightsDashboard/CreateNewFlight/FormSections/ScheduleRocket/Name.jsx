@@ -84,7 +84,7 @@ const StyledInput = styled.input`
   padding: 10px;
   border: ${(props) =>
     props.allowed ? "1px solid #fff6ee" : "1px solid #be1e2d"};
-  background-color: #fff6ee;
+  background-color: #fdf9f5;
   font-family: "JohnSans Lite Pro";
   font-size: 15px;
   border-radius: 5px;

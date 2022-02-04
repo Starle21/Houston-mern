@@ -257,7 +257,7 @@ const StyledNewFlight = styled.div`
     font-family: "JohnSans Black Pro";
     font-size: 13px;
     border: 1px solid #191e3b;
-    border-radius: 0.3rem;
+    /* border-radius: 0.3rem; */
     /* background-color: #fff; */
     /* color: #191e3b; */
     padding: 0.4rem 1rem;
