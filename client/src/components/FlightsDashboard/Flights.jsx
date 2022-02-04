@@ -94,6 +94,7 @@ function Flights() {
             state={state}
             landed={hasLanded}
           />
+          // <div>test</div>
         );
       })}
       <DivideFlights>scheduled</DivideFlights>

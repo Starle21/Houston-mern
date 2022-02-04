@@ -7,20 +7,11 @@ import { updateNewFlight } from "../../../../../store/reducers/newFlightReducer"
 
 function TouchDown() {
   const dispatch = useDispatch();
+
   const newFlight = useSelector((state) => state.newFlight);
   const touchDownTimeDate = useSelector(
     (state) => state.newFlight.touchDownTimeDate
   );
-
-  const calcTouchDown = (distance, speed, takeOffIso) => {
-    const duration = distance / speed; // s
-    const takeOffDate = new Date(takeOffIso);
-    const takeOff = takeOffDate.getTime() / 1000;
-    const touchDown = takeOff + duration;
-    const touchDownDate = new Date(touchDown * 1000).toISOString();
-    dispatch(updateNewFlight("touchDownTimeDate", touchDownDate));
-    dispatch(updateNewFlight("duration", duration));
-  };
 
   useEffect(() => {
     if (
@@ -28,10 +19,12 @@ function TouchDown() {
       !newFlight.distance ||
       !newFlight.takeOffTimeDate
     ) {
-      dispatch(
-        setNotification("schedule", "Fill out all the info to calc touch down")
-      );
+      // dispatch(
+      //   setNotification("schedule", "Fill out all the info to calc touch down")
+      // );
       return;
+    } else {
+      // dispatch(setNotification("schedule", ""));
     }
     calcTouchDown(
       newFlight.distance,
@@ -43,6 +36,16 @@ function TouchDown() {
     newFlight?.rocket?.speed,
     newFlight?.takeOffTimeDate,
   ]);
+
+  const calcTouchDown = (distance, speed, takeOffIso) => {
+    const duration = distance / speed; // s
+    const takeOffDate = new Date(takeOffIso);
+    const takeOff = takeOffDate.getTime() / 1000;
+    const touchDown = takeOff + duration;
+    const touchDownDate = new Date(touchDown * 1000).toISOString();
+    dispatch(updateNewFlight("touchDownTimeDate", touchDownDate));
+    dispatch(updateNewFlight("duration", duration));
+  };
 
   return (
     <StyledTouchDown>

@@ -7,12 +7,26 @@ import { setNotification } from "../../../../../store/reducers/notificationReduc
 function Duration() {
   const duration = useSelector((state) => state.newFlight.duration);
 
+  const formatHours = () => {
+    if (!duration) return "?";
+    return Math.round(duration / 60 / 60);
+  };
+
+  const formatMinutes = () => {
+    if (!duration) return "?";
+    return Math.round((duration / 60) % 60);
+  };
+
+  const formatDays = () => {
+    if (!duration) return "?";
+    return (duration / 60 / 60 / 24).toFixed(1);
+  };
+
   return (
     <StyledDuration>
       Flight's duration:{" "}
       <span>
-        {Math.round(duration / 60 / 60)}hrs {Math.round((duration / 60) % 60)}
-        min {(duration / 60 / 60 / 24).toFixed(1)}days
+        {formatHours()}hrs {formatMinutes()}min {formatDays()}days
       </span>{" "}
     </StyledDuration>
   );

@@ -44,6 +44,10 @@ function ScheduleRocket({
     }
   }, [newFlight]);
 
+  useEffect(() => {
+    dispatch(setNotification("schedule", "fill out all the info"));
+  }, []);
+
   // useEffect(() => {
   //   if (!name || !time || !date || !distance || !selectedRocket) {
   //     // setCompletedParts({ ...completedParts, schedule: false });

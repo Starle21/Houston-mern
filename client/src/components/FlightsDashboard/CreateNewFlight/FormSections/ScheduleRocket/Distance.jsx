@@ -18,7 +18,7 @@ function Distance() {
         setNotification("schedule", "Distance must be at least 1 000 000 km")
       );
     } else {
-      dispatch(setNotification("schedule", "ok"));
+      dispatch(setNotification("schedule", ""));
     }
   };
 
