@@ -2,7 +2,6 @@ import React from "react";
 import DivideFlights from "../../../../CommonSignedIn/DivideFlights";
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
-import rocketService from "../../../../../services/rockets";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
@@ -15,49 +14,17 @@ import TakeOffTimeDate from "./TakeOffTime";
 import TouchDown from "./TouchDown";
 import Duration from "./Duration";
 
-function ScheduleRocket({
-  selectedRocket,
-  setFuelForFlight,
-  setCompletedParts,
-  completedParts,
-  distance,
-  name,
-}) {
-  const validateRef = useRef([]);
+function ScheduleRocket() {
   const dispatch = useDispatch();
   const notify = useSelector((state) => state.notification.schedule);
   const newFlight = useSelector((state) => state.newFlight);
 
   useEffect(() => {
-    if (
-      !newFlight.name ||
-      !newFlight.takeOffTimeDate ||
-      !newFlight.distance ||
-      !newFlight.rocket
-    ) {
-      // setCompletedParts({ ...completedParts, schedule: false });
-      // setCompletedParts(false);
-      // dispatch(setNotification("schedule", "Fill out all the info"));
-      return;
-    } else {
-      // setCompletedParts({ ...completedParts, schedule: true });
-      // setCompletedParts(true);
-      // dispatch(setNotification("schedule", "Schedule&Rocket OK"));
-    }
-  }, [newFlight]);
-
-  useEffect(() => {
     dispatch(setNotification("schedule", "fill out all the info"));
   }, []);
 
-  // if allowed find false true
-  // run check function from that component
-
-  // if allowed find false false
-  // set completed true
   useEffect(() => {
     if (!newFlight.allowStart?.schedule) return;
-    if (!validateRef.current) return;
 
     const entries = [];
     Object.entries(newFlight.allowStart.schedule).forEach(([key, value]) => {
@@ -73,66 +40,23 @@ function ScheduleRocket({
     } else if (notify === "" && entries.length !== 0) {
       dispatch(setCompleted("schedule", false));
       dispatch(setNotification("schedule", "fill out all the info"));
-
-      // const index = validateRef.current
-      //   .map((el, index) => {
-      //     if (el.key === entries[0]) return index;
-      //     else return null;
-      //   })
-      //   .filter((el) => el !== null)[0];
-      // validateRef.current[index].checkFormat(newFlight[entries[0]]);
     } else {
       dispatch(setCompleted("schedule", false));
     }
   }, [newFlight.allowStart?.schedule]);
 
-  // useEffect(() => {
-  //   if (!name || !time || !date || !distance || !selectedRocket) {
-  //     // setCompletedParts({ ...completedParts, schedule: false });
-  //     setCompletedParts(false);
-  //     return setNotification("Fill out all the info");
-  //   } else {
-  //     // setCompletedParts({ ...completedParts, schedule: true });
-  //     setCompletedParts(true);
-  //     setNotification("Schedule&Rocket OK");
-  //   }
-  // }, [name, time, date, distance, selectedRocket, notification]);
-
-  useEffect(() => {
-    if (!selectedRocket) return;
-    setFuelForFlight(distance * selectedRocket.consumption);
-  }, [selectedRocket, distance]);
-
-  console.log(newFlight.completed?.schedule);
-
   return (
     <>
       <DivideFlights>schedule&rocket</DivideFlights>
       <StyledFormSection>
-        <Name
-          ref={(element) => {
-            validateRef.current[0] = element;
-          }}
-        />
-        <TakeOffTimeDate
-          ref={(element) => {
-            validateRef.current[1] = element;
-          }}
-        />
-        <Distance
-          ref={(element) => {
-            validateRef.current[2] = element;
-          }}
-        />
-        <Rocket
-          ref={(element) => {
-            validateRef.current[3] = element;
-          }}
-        />
+        <Name />
+        <TakeOffTimeDate />
+        <Distance />
+        <Rocket />
         <TouchDown />
         <Duration />
-        {/* <div className="notification">{notification}</div> */}
-        <StyledNotification color={newFlight.completed?.schedule}>
+
+        <StyledNotification bgColor={newFlight.completed?.schedule}>
           {notify}
         </StyledNotification>
       </StyledFormSection>
@@ -149,7 +73,7 @@ const StyledNotification = styled.div`
   font-weight: bold;
   width: 100%;
   text-align: center;
-  background-color: ${(props) => (props.color ? "#61b66c" : "#be1e2d")};
+  background-color: ${(props) => (props.bgColor ? "#61b66c" : "#be1e2d")};
 `;
 
 const StyledFormSection = styled.div`
@@ -180,9 +104,6 @@ const StyledFormSection = styled.div`
 
   .grow {
     flex-grow: 1;
-  }
-
-  .notification {
   }
 `;
 

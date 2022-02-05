@@ -51,8 +51,9 @@ function Rocket() {
         onChange={handleRocketSelection}
         onFocus={handleFocus}
         allowed={allowed}
+        defaultValue="Select a rocket"
       >
-        <option disabled selected id="first">
+        <option value="Select a rocket" disabled>
           Select a rocket
         </option>
         {rockets.map((r) => {

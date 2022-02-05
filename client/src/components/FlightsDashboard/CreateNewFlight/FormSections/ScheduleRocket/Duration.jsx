@@ -48,13 +48,6 @@ const StyledDuration = styled.div`
   padding: 0.9rem 1.5rem;
   margin: 1px 0;
   position: relative;
-
-  .unit {
-    position: absolute;
-    right: 2rem;
-    font-size: 15px;
-    background-color: #fff6ee;
-  }
 `;
 
 export default Duration;

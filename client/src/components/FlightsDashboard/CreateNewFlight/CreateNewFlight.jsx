@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // import DivideFlights from "../DivideFlights";
 import ScheduleRocket from "./FormSections/ScheduleRocket/ScheduleRocket";
-import Fuel from "./FormSections/Fuel";
+import Fuel from "./FormSections/Fuel/Fuel";
 import SelectAstronauts from "./FormSections/SelectAstronauts";
 import CheckFood from "./FormSections/CheckFood";
 import Load from "./FormSections/Load";
@@ -24,11 +24,6 @@ function CreateNewFlight() {
   );
 
   useEffect(() => {
-    console.log("init");
-    // async function init() {
-    //   await dispatch(initNewFlight());
-    // }
-    // init();
     dispatch(initNewFlight());
   }, []);
 

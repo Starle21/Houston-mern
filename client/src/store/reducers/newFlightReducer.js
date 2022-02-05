@@ -14,7 +14,7 @@ const initialProps = {
       distance: false,
       rocket: false,
     },
-    fuel: {},
+    fuel: { requiredFuel: false },
     food: {},
     astronauts: {},
     load: {},
@@ -25,6 +25,7 @@ const initialProps = {
     food: false,
     astronauts: false,
   },
+  tankLevelForStart: 0,
 };
 // action creators
 export const initNewFlight = () => {
@@ -72,6 +73,15 @@ export const setCompleted = (part, state) => {
   };
 };
 
+export const updateTankLevelForStart = (value) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "UPDATE_TANK",
+      data: { value },
+    });
+  };
+};
+
 // reducer
 const newFlightReducer = (state = {}, action) => {
   switch (action.type) {
@@ -106,6 +116,11 @@ const newFlightReducer = (state = {}, action) => {
           [action.data.part]: action.data.state,
         },
       };
+      return updated;
+    }
+
+    case "UPDATE_TANK": {
+      const updated = { ...state, tankLevelForStart: action.data.value };
       return updated;
     }
 
