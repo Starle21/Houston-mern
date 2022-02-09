@@ -9,6 +9,7 @@ import {
   allowStart,
 } from "../../../../../store/reducers/newFlightReducer";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
+import { updateTankLevelForStart } from "../../../../../store/reducers/newFlightReducer";
 
 function Rocket() {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ function Rocket() {
     } else {
       dispatch(setNotification("schedule", ""));
       dispatch(allowStart("schedule", "rocket", true));
+      dispatch(updateTankLevelForStart(0));
+      dispatch(allowStart("fuel", "tankLevelForStart", false));
     }
   };
 

@@ -12,35 +12,44 @@ function Notification() {
   const newFlight = useSelector((state) => state.newFlight);
 
   useEffect(() => {
-    console.log(notification);
-    if (!newFlight.completed?.schedule) {
+    if (!newFlight.completed) return;
+    if (!newFlight.completed.schedule) {
       dispatch(setNotification("fuel", "Complete the previous section first"));
+    } else if (newFlight.completed.schedule && notification === "") {
+      dispatch(setNotification("fuel", "fuel compl"));
     }
-  }, [newFlight.completed?.schedule, notification]);
+  }, [newFlight?.completed?.schedule]);
 
-  useEffect(() => {
-    if (!newFlight.allowStart?.fuel) return;
+  // useEffect(() => {
+  //   console.log(notification);
+  //   if (!newFlight.completed?.schedule) {
+  //     dispatch(setNotification("fuel", "Complete the previous section first"));
+  //   }
+  // }, [newFlight.completed?.schedule, notification]);
 
-    const entries = [];
-    Object.entries(newFlight.allowStart.fuel).forEach(([key, value]) => {
-      if (value === false) {
-        entries.push(key);
-        return;
-      }
-    });
+  // useEffect(() => {
+  //   if (!newFlight.allowStart?.fuel) return;
 
-    console.log(entries);
+  //   const entries = [];
+  //   Object.entries(newFlight.allowStart.fuel).forEach(([key, value]) => {
+  //     if (value === false) {
+  //       entries.push(key);
+  //       return;
+  //     }
+  //   });
 
-    if (entries.length === 0) {
-      //   dispatch(setCompleted("fuel", true));
-      dispatch(setNotification("fuel", "fuel ok"));
-    } else if (notification === "" && entries.length !== 0) {
-      //   dispatch(setCompleted("fuel", false));
-      //   dispatch(setNotification("schedule", "fill out all the info"));
-    } else {
-      dispatch(setCompleted("fuel", false));
-    }
-  }, [newFlight.allowStart?.fuel]);
+  //   console.log(entries);
+
+  //   if (entries.length === 0) {
+  //     //   dispatch(setCompleted("fuel", true));
+  //     dispatch(setNotification("fuel", "fuel ok"));
+  //   } else if (notification === "" && entries.length !== 0) {
+  //     //   dispatch(setCompleted("fuel", false));
+  //     //   dispatch(setNotification("schedule", "fill out all the info"));
+  //   } else {
+  //     dispatch(setCompleted("fuel", false));
+  //   }
+  // }, [newFlight.allowStart?.fuel]);
 
   return <StyledNotification>{notification}</StyledNotification>;
 }

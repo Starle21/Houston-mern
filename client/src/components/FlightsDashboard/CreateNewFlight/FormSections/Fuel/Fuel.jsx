@@ -125,6 +125,7 @@ function Fuel({
         <Capacity />
         <RequiredFuel />
         <TankLevel />
+        <Notification />
 
         {/* <div className="item">
           <label>Current tank level</label>
@@ -138,7 +139,6 @@ function Fuel({
           </div>
         </div> */}
         {/* <StyledNotification bgColor={newFlight.completed?.schedule}> */}
-        <Notification />
         {/* <StyledNotification>{notify}</StyledNotification> */}
 
         {/* <div className="notification">{notification}</div> */}

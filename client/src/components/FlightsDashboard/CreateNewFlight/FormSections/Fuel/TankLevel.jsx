@@ -12,6 +12,9 @@ function TankLevel() {
   const dispatch = useDispatch();
   const newFlight = useSelector((state) => state.newFlight);
   const requiredFuel = useSelector((state) => state.newFlight?.requiredFuel);
+  const allowRequiredFuel = useSelector(
+    (state) => state.newFlight?.allowStart?.fuel?.requiredFuel
+  );
   const currentLevel = useSelector(
     (state) => state.newFlight.rocket?.tankLevelForStart
   );
@@ -23,37 +26,69 @@ function TankLevel() {
     dispatch(updateTankLevelForStart(currentLevel));
   }, [newFlight?.rocket]);
 
+  // TO DO ------------------------------------------
+  // if rocket changes - fill up the tank check!
   useEffect(() => {
-    if (newFlight.allowStart?.fuel.requiredFuel) {
-      dispatch(allowStart("fuel", "tankLevelForStart", false));
-      dispatch(setNotification("fuel", "Fill up the fuel"));
-    } else if (newFlight.allowStart?.fuel.requiredFuel) {
-      dispatch(allowStart("fuel", "tankLevelForStart", true));
-      dispatch(setNotification("fuel", ""));
+    if (!allowRequiredFuel) return;
+    if (!newFlight.completed?.schedule) return;
+    // if (allowRequiredFuel) {
+    //   dispatch(setNotification("fuel", "true"));
+    // } else {
+    //   dispatch(setNotification("fuel", "false"));
+    // }
+    if (tankLevelForStart < requiredFuel) {
+      dispatch(setNotification("fuel", "Fill up the tank"));
+    } else {
+      dispatch(setNotification("fuel", "level ok"));
     }
   }, [
-    newFlight.allowStart?.fuel.requiredFuel,
+    allowRequiredFuel,
     newFlight.completed?.schedule,
-    newFlight?.rocket,
+    newFlight.rocket?.name,
   ]);
+
+  // useEffect(() => {
+  //   if (
+  //     newFlight.allowStart?.fuel.requiredFuel &&
+  //     tankLevelForStart < requiredFuel
+  //   ) {
+  //     dispatch(allowStart("fuel", "tankLevelForStart", false));
+  //     dispatch(setNotification("fuel", "Fill up the fuel"));
+  //   } else if (
+  //     newFlight.allowStart?.fuel.requiredFuel &&
+  //     tankLevelForStart >= requiredFuel
+  //   ) {
+  //     dispatch(allowStart("fuel", "tankLevelForStart", true));
+  //     dispatch(setNotification("fuel", ""));
+  //   }
+  // }, [
+  //   newFlight.allowStart?.fuel.requiredFuel,
+  //   newFlight.completed?.schedule,
+  //   newFlight?.rocket,
+  //   newFlight?.requiredFuel,
+  // ]);
 
   const addFuel = (e) => {
     e.preventDefault();
 
-    if (!newFlight.completed?.schedule) return;
+    if (!newFlight.completed?.schedule || !allowRequiredFuel) return;
 
-    const volume = Math.round(requiredFuel * 1.1);
+    dispatch(allowStart("fuel", "tankLevelForStart", true));
+    dispatch(updateTankLevelForStart(requiredFuel));
+    dispatch(setNotification("fuel", "add level ok"));
 
-    if (
-      newFlight.allowStart.fuel.requiredFuel &&
-      volume > newFlight.rocket.tankCapacity
-    ) {
-      dispatch(allowStart("fuel", "tankLevelForStart", false));
-      dispatch(updateTankLevelForStart(requiredFuel));
-    } else {
-      dispatch(allowStart("fuel", "tankLevelForStart", true));
-      dispatch(updateTankLevelForStart(volume));
-    }
+    // const volume = Math.round(requiredFuel * 1.1);
+
+    // if (
+    //   newFlight.allowStart.fuel.requiredFuel &&
+    //   volume > newFlight.rocket.tankCapacity
+    // ) {
+    //   dispatch(allowStart("fuel", "tankLevelForStart", false));
+    //   dispatch(updateTankLevelForStart(requiredFuel));
+    // } else {
+    //   dispatch(allowStart("fuel", "tankLevelForStart", true));
+    //   dispatch(updateTankLevelForStart(volume));
+    // }
   };
 
   const format = (value) => {

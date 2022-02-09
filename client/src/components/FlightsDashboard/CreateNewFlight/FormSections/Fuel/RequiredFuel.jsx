@@ -15,6 +15,9 @@ function RequiredFuel() {
   const consumption = useSelector(
     (state) => state.newFlight.rocket?.consumption
   );
+  const tankCapacity = useSelector(
+    (state) => state.newFlight.rocket?.tankCapacity
+  );
   const distance = useSelector((state) => state.newFlight.distance);
 
   const format = (value) => {
@@ -23,24 +26,28 @@ function RequiredFuel() {
   };
 
   const checkFormat = (reqFuel) => {
-    if (reqFuel > newFlight.rocket.tankCapacity) {
+    if (reqFuel > tankCapacity) {
       dispatch(allowStart("fuel", "requiredFuel", false));
-      dispatch(
-        setNotification("fuel", "Not allowed, tank is too small for the flight")
-      );
+      dispatch(setNotification("fuel", "Tank is too small for the flight"));
     } else {
       dispatch(allowStart("fuel", "requiredFuel", true));
-      dispatch(setNotification("fuel", ""));
+      dispatch(setNotification("fuel", "reqFuel ok"));
     }
   };
 
+  const calcReqFuel = () => {
+    return Math.round(distance * consumption);
+  };
+
   useEffect(() => {
+    // if (!distance || !consumption)
+    if (!newFlight.completed?.schedule) return;
     if (!distance || !consumption || distance < 1000000)
       return "no distance or rocket";
-    const reqFuel = Math.round(distance * consumption);
+    const reqFuel = calcReqFuel();
     dispatch(updateNewFlight("requiredFuel", reqFuel));
     checkFormat(reqFuel);
-  }, [distance, consumption, newFlight?.rocket, newFlight.completed?.schedule]);
+  }, [distance, consumption, newFlight.completed?.schedule]);
 
   return (
     <StyledRequiredFuel>
