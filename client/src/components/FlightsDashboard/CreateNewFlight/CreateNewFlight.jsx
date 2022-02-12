@@ -22,6 +22,9 @@ function CreateNewFlight() {
   const isPartScheduleComplete = useSelector(
     (state) => state.newFlight.completed?.schedule
   );
+  const isPartFuelComplete = useSelector(
+    (state) => state.newFlight.completed?.fuel
+  );
 
   useEffect(() => {
     dispatch(initNewFlight());
@@ -99,7 +102,7 @@ function CreateNewFlight() {
               schedule&rocket
             </StatusButton>
 
-            <StatusButton className="statusBtn" filled={completedParts.fuel}>
+            <StatusButton className="statusBtn" filled={isPartFuelComplete}>
               check fuel
             </StatusButton>
 

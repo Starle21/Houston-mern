@@ -6,7 +6,6 @@ import {
   updateTankLevelForStart,
   allowStart,
 } from "../../../../../store/reducers/newFlightReducer";
-import { setNotification } from "../../../../../store/reducers/notificationReducer";
 
 function TankLevel() {
   const dispatch = useDispatch();
@@ -22,38 +21,49 @@ function TankLevel() {
     (state) => state.newFlight.tankLevelForStart
   );
 
+  const [notify, setNotify] = useState("");
+
+  const changeNotify = (state, newNotification) => {
+    return newNotification;
+  };
+
   useEffect(() => {
     dispatch(updateTankLevelForStart(currentLevel));
-  }, [newFlight?.rocket]);
+  }, [newFlight?.rocket, newFlight?.distance]);
 
   useEffect(() => {
-    if (!newFlight.completed?.schedule) return; // checking only if schedule is completed
-    if (!allowRequiredFuel) return; // checking only if required is true
+    if (!requiredFuel) return; // checking only if required is true
+    if (!tankLevelForStart) return;
+    checkFormat();
+  }, [allowRequiredFuel, requiredFuel, tankLevelForStart, newFlight?.distance]);
 
-    console.log("required", requiredFuel);
+  const checkFormat = () => {
     if (tankLevelForStart === requiredFuel) {
       dispatch(allowStart("fuel", "tankLevelForStart", true));
-      // dispatch(setNotification("fuel", "level ok"));
-    } else {
-      console.log("level false");
+      setNotify((curState) => changeNotify(curState, ""));
+    } else if (!allowRequiredFuel) {
+      setNotify((curState) => changeNotify(curState, "no rocket or distance"));
       dispatch(allowStart("fuel", "tankLevelForStart", false));
-      dispatch(
-        setNotification(
-          "fuel",
-          "Set required fuel level - fill the tank up or take fuel out"
-        )
+    } else {
+      dispatch(allowStart("fuel", "tankLevelForStart", false));
+      setNotify((curState) =>
+        changeNotify(curState, "Fill the tank up or take fuel out")
       );
     }
-  }, [allowRequiredFuel, requiredFuel]);
+  };
 
   const addFuel = (e) => {
     e.preventDefault();
 
-    if (!newFlight.completed?.schedule || !allowRequiredFuel) return;
+    if (!allowRequiredFuel) {
+      dispatch(allowStart("fuel", "tankLevelForStart", false));
+      // dispatch(updateTankLevelForStart(0));
+      return;
+    }
 
     dispatch(allowStart("fuel", "tankLevelForStart", true));
     dispatch(updateTankLevelForStart(requiredFuel));
-    // dispatch(setNotification("fuel", "add level ok"));
+    checkFormat();
   };
 
   const format = (value) => {
@@ -62,13 +72,18 @@ function TankLevel() {
 
   return (
     <StyledTankLevel>
-      <label>Fuel level before start</label>
-      <div>
-        {tankLevelForStart
-          ? `${format(tankLevelForStart)} l`
-          : "complete the first section"}
+      <div className="readout">
+        <label>Fuel level before start:</label>
+        <div className="input">
+          <span>
+            {tankLevelForStart
+              ? `${format(tankLevelForStart)} l`
+              : "NO ROCKET OR DISTANCE"}
+          </span>
+          <div className="notify">{notify}</div>
+        </div>
       </div>
-      <div className="addFuel">
+      <div className="changeFuel">
         <button onClick={addFuel}> set fuel for the flight </button>
       </div>
     </StyledTankLevel>
@@ -76,17 +91,34 @@ function TankLevel() {
 }
 
 const StyledTankLevel = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   border: 1px solid #f7911d54;
   padding: 0.9rem 1.5rem;
   margin: 1px 0;
   position: relative;
 
-  .addFuel {
+  .readout {
     display: flex;
-    align-items: flex-end;
+    justify-content: space-between;
+    align-items: baseline;
+    text-align: right;
+  }
+
+  .input {
+    flex-basis: 50%;
+    margin-bottom: 0.5rem;
+  }
+
+  .notify {
+    font-family: "JohnSans Lite Pro";
+    font-size: 15px;
+    color: #be1e2d;
+    font-weight: bold;
+    height: 15px;
+  }
+
+  .changeFuel {
+    display: flex;
+    align-items: center;
     flex-direction: column;
   }
 `;

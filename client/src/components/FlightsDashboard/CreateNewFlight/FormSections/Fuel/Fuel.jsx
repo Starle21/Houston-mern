@@ -118,6 +118,13 @@ function Fuel({
   //   });
   // };
 
+  // useEffect(() => {
+  //   if (!newFlight.completed) return;
+  //   if (!newFlight.completed.schedule) {
+  //     dispatch(setNotification("fuel", "Complete the previous section first"));
+  //   }
+  // }, [newFlight?.completed?.schedule]);
+
   // TO DO -----------------
   // fuel completed - no false in allow
   useEffect(() => {
@@ -130,15 +137,28 @@ function Fuel({
         return;
       }
     });
-    console.log("entries", entries);
+    console.log(entries);
+
+    if (!newFlight?.completed?.schedule) {
+      dispatch(setNotification("fuel", "Complete the first section"));
+      dispatch(setCompleted("fuel", false));
+      return;
+    }
+
+    // if (!newFlight.distance || !newFlight.rocket) {
+    //   dispatch(setNotification("fuel", "Fuel not ok"));
+    //   dispatch(setCompleted("fuel", false));
+    //   return;
+    // }
+
     if (entries.length === 0) {
-      console.log("fuel compl");
       dispatch(setCompleted("fuel", true));
       dispatch(setNotification("fuel", "fuel ok"));
-    } else if (notification === "") {
-      dispatch(setNotification("fuel", "0"));
+    } else {
+      dispatch(setNotification("fuel", "complete the fuel section"));
+      dispatch(setCompleted("fuel", false));
     }
-  }, [newFlight.allowStart?.fuel]);
+  }, [newFlight.allowStart?.fuel, newFlight?.completed?.schedule]);
 
   return (
     <>
@@ -148,7 +168,7 @@ function Fuel({
         <Capacity />
         <RequiredFuel />
         <TankLevel />
-        <Notification />
+        {/* <Notification /> */}
 
         {/* <div className="item">
           <label>Current tank level</label>
@@ -162,7 +182,9 @@ function Fuel({
           </div>
         </div> */}
         {/* <StyledNotification bgColor={newFlight.completed?.schedule}> */}
-        {/* <StyledNotification>{notify}</StyledNotification> */}
+        <StyledNotification bgColor={newFlight.completed?.fuel}>
+          {notification}
+        </StyledNotification>
 
         {/* <div className="notification">{notification}</div> */}
       </StyledFormSection>

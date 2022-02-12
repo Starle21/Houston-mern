@@ -49,7 +49,11 @@ function Notification() {
   //   }
   // }, [newFlight.allowStart?.fuel]);
 
-  return <StyledNotification>{notification}</StyledNotification>;
+  return (
+    <StyledNotification bgColor={newFlight.completed?.fuel}>
+      {notification}
+    </StyledNotification>
+  );
 }
 
 const StyledNotification = styled.div`
