@@ -10,6 +10,7 @@ import { setNotification } from "../../../../../store/reducers/notificationReduc
 
 function RequiredFuel() {
   const dispatch = useDispatch();
+  const notification = useSelector((state) => state.notification.fuel);
   const newFlight = useSelector((state) => state.newFlight);
   const reqFuel = useSelector((state) => state.newFlight.requiredFuel);
   const consumption = useSelector(
@@ -29,9 +30,11 @@ function RequiredFuel() {
     if (reqFuel > tankCapacity) {
       dispatch(allowStart("fuel", "requiredFuel", false));
       dispatch(setNotification("fuel", "Tank is too small for the flight"));
-    } else {
+    }
+    // if (notification === "")
+    else {
       dispatch(allowStart("fuel", "requiredFuel", true));
-      dispatch(setNotification("fuel", "reqFuel ok"));
+      // dispatch(setNotification("fuel", "reqFuel ok"));
     }
   };
 

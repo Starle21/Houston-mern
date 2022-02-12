@@ -15,8 +15,6 @@ function Notification() {
     if (!newFlight.completed) return;
     if (!newFlight.completed.schedule) {
       dispatch(setNotification("fuel", "Complete the previous section first"));
-    } else if (newFlight.completed.schedule && notification === "") {
-      dispatch(setNotification("fuel", "fuel compl"));
     }
   }, [newFlight?.completed?.schedule]);
 

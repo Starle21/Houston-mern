@@ -10,6 +10,7 @@ import Notification from "./Notification";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
+import { setCompleted } from "../../../../../store/reducers/newFlightReducer";
 
 function Fuel({
   selectedRocket,
@@ -20,7 +21,7 @@ function Fuel({
 }) {
   const dispatch = useDispatch();
   const newFlight = useSelector((state) => state.newFlight);
-  const notify = useSelector((state) => state.notification.fuel);
+  const notification = useSelector((state) => state.notification?.fuel);
   // const [notification, setNotification] = useState();
 
   // useEffect(() => {
@@ -116,6 +117,28 @@ function Fuel({
   //     tankLevelForStart: fuelForFlight + fuelForFlight * 0.1,
   //   });
   // };
+
+  // TO DO -----------------
+  // fuel completed - no false in allow
+  useEffect(() => {
+    if (!newFlight.allowStart?.fuel) return;
+
+    const entries = [];
+    Object.entries(newFlight.allowStart.fuel).forEach(([key, value]) => {
+      if (value === false) {
+        entries.push(key);
+        return;
+      }
+    });
+    console.log("entries", entries);
+    if (entries.length === 0) {
+      console.log("fuel compl");
+      dispatch(setCompleted("fuel", true));
+      dispatch(setNotification("fuel", "fuel ok"));
+    } else if (notification === "") {
+      dispatch(setNotification("fuel", "0"));
+    }
+  }, [newFlight.allowStart?.fuel]);
 
   return (
     <>

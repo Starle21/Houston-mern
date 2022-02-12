@@ -26,47 +26,25 @@ function TankLevel() {
     dispatch(updateTankLevelForStart(currentLevel));
   }, [newFlight?.rocket]);
 
-  // TO DO ------------------------------------------
-  // if rocket changes - fill up the tank check!
   useEffect(() => {
-    if (!allowRequiredFuel) return;
-    if (!newFlight.completed?.schedule) return;
-    // if (allowRequiredFuel) {
-    //   dispatch(setNotification("fuel", "true"));
-    // } else {
-    //   dispatch(setNotification("fuel", "false"));
-    // }
-    if (tankLevelForStart < requiredFuel) {
-      dispatch(setNotification("fuel", "Fill up the tank"));
-    } else {
-      dispatch(setNotification("fuel", "level ok"));
-    }
-  }, [
-    allowRequiredFuel,
-    newFlight.completed?.schedule,
-    newFlight.rocket?.name,
-  ]);
+    if (!newFlight.completed?.schedule) return; // checking only if schedule is completed
+    if (!allowRequiredFuel) return; // checking only if required is true
 
-  // useEffect(() => {
-  //   if (
-  //     newFlight.allowStart?.fuel.requiredFuel &&
-  //     tankLevelForStart < requiredFuel
-  //   ) {
-  //     dispatch(allowStart("fuel", "tankLevelForStart", false));
-  //     dispatch(setNotification("fuel", "Fill up the fuel"));
-  //   } else if (
-  //     newFlight.allowStart?.fuel.requiredFuel &&
-  //     tankLevelForStart >= requiredFuel
-  //   ) {
-  //     dispatch(allowStart("fuel", "tankLevelForStart", true));
-  //     dispatch(setNotification("fuel", ""));
-  //   }
-  // }, [
-  //   newFlight.allowStart?.fuel.requiredFuel,
-  //   newFlight.completed?.schedule,
-  //   newFlight?.rocket,
-  //   newFlight?.requiredFuel,
-  // ]);
+    console.log("required", requiredFuel);
+    if (tankLevelForStart === requiredFuel) {
+      dispatch(allowStart("fuel", "tankLevelForStart", true));
+      // dispatch(setNotification("fuel", "level ok"));
+    } else {
+      console.log("level false");
+      dispatch(allowStart("fuel", "tankLevelForStart", false));
+      dispatch(
+        setNotification(
+          "fuel",
+          "Set required fuel level - fill the tank up or take fuel out"
+        )
+      );
+    }
+  }, [allowRequiredFuel, requiredFuel]);
 
   const addFuel = (e) => {
     e.preventDefault();
@@ -75,20 +53,7 @@ function TankLevel() {
 
     dispatch(allowStart("fuel", "tankLevelForStart", true));
     dispatch(updateTankLevelForStart(requiredFuel));
-    dispatch(setNotification("fuel", "add level ok"));
-
-    // const volume = Math.round(requiredFuel * 1.1);
-
-    // if (
-    //   newFlight.allowStart.fuel.requiredFuel &&
-    //   volume > newFlight.rocket.tankCapacity
-    // ) {
-    //   dispatch(allowStart("fuel", "tankLevelForStart", false));
-    //   dispatch(updateTankLevelForStart(requiredFuel));
-    // } else {
-    //   dispatch(allowStart("fuel", "tankLevelForStart", true));
-    //   dispatch(updateTankLevelForStart(volume));
-    // }
+    // dispatch(setNotification("fuel", "add level ok"));
   };
 
   const format = (value) => {
