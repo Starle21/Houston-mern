@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import DivideFlights from "../../../CommonSignedIn/DivideFlights";
+import DivideFlights from "../../../../CommonSignedIn/DivideFlights";
 import styled from "styled-components";
-import astronautService from "../../../../services/astronauts";
+import astronautService from "../../../../../services/astronauts";
 import AstronautRow from "./AstronautRow";
+
+import CrewNumber from "./CrewNumber";
+import Astronauts from "./Astronauts";
 
 function SelectAstronauts({
   selectedRocket,
@@ -54,15 +57,10 @@ function SelectAstronauts({
     <>
       <DivideFlights>Select Astronauts</DivideFlights>
       <StyledFormSection>
-        <div className="item calc">
-          <label>Crew number</label>
-          <span>
-            {selectedRocket
-              ? `${selectedRocket.numberCrew} people`
-              : "select rocket first"}
-          </span>
-        </div>
-        <div>Select Available Astronauts:</div>
+        <CrewNumber />
+        <Astronauts />
+
+        {/* <div>Select Available Astronauts:</div>
         {astronauts?.map((a, i) => {
           return (
             <AstronautRow
@@ -74,8 +72,7 @@ function SelectAstronauts({
               crew={selectedRocket?.numberCrew}
             />
           );
-        })}
-        {/* {createAstronautRow()} */}
+        })} */}
         <div className="notification">{notification}</div>
       </StyledFormSection>
     </>

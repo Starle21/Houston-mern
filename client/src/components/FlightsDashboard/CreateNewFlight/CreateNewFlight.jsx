@@ -3,7 +3,7 @@ import styled from "styled-components";
 // import DivideFlights from "../DivideFlights";
 import ScheduleRocket from "./FormSections/ScheduleRocket/ScheduleRocket";
 import Fuel from "./FormSections/Fuel/Fuel";
-import SelectAstronauts from "./FormSections/SelectAstronauts";
+import SelectAstronauts from "./FormSections/Astronauts/SelectAstronauts";
 import CheckFood from "./FormSections/CheckFood";
 import Load from "./FormSections/Load";
 import flightService from "../../../services/flights";
@@ -126,28 +126,8 @@ function CreateNewFlight() {
             </MainButton>
           </div>
           <form onSubmit={createNewFlight} id="newFlight">
-            <ScheduleRocket
-              selectedRocket={selectedRocket}
-              setSelectedRocket={setSelectedRocket}
-              setFuelForFlight={setFuelForFlight}
-              durationSeconds={durationSeconds}
-              setDurationSeconds={setDurationSeconds}
-              setCompletedParts={setPartSchedule}
-              completedParts={partSchedule}
-              distance={distance}
-              setDistance={setDistance}
-              name={name}
-              setName={setName}
-              setTakeOff={setTakeOff}
-            />
-
-            <Fuel
-              selectedRocket={selectedRocket}
-              setSelectedRocket={setSelectedRocket}
-              fuelForFlight={fuelForFlight}
-              setCompletedParts={setCompletedParts}
-              completedParts={completedParts}
-            />
+            <ScheduleRocket />
+            <Fuel />
             <SelectAstronauts
               selectedRocket={selectedRocket}
               selectedAstronauts={selectedAstronauts}
