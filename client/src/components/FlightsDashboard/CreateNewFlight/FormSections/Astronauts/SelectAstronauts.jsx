@@ -7,6 +7,11 @@ import AstronautRow from "./AstronautRow";
 import CrewNumber from "./CrewNumber";
 import Astronauts from "./Astronauts";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { setNotification } from "../../../../../store/reducers/notificationReducer";
+import { setCompleted } from "../../../../../store/reducers/newFlightReducer";
+
 function SelectAstronauts({
   selectedRocket,
   setSelectedAstronauts,
@@ -14,44 +19,67 @@ function SelectAstronauts({
   setCompletedParts,
   completedParts,
 }) {
-  const [notification, setNotification] = useState();
-  const [astronauts, setAstronauts] = useState([]);
+  // const [notification, setNotification] = useState();
 
-  // get all available astronauts
+  const newFlight = useSelector((state) => state.newFlight);
+  const notification = useSelector((state) => state.notification?.astronauts);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const getAllAstronauts = async () => {
-      const allAstronauts = await astronautService.getAll();
-      setAstronauts(allAstronauts);
-    };
-    getAllAstronauts();
-  }, []);
+    if (!newFlight.allowStart?.astronauts) return;
+
+    if (!newFlight?.completed?.schedule) {
+      dispatch(setNotification("astronauts", "Complete the first section"));
+      dispatch(setCompleted("astronauts", false));
+      return;
+    }
+
+    const entries = [];
+    Object.entries(newFlight.allowStart.astronauts).forEach(([key, value]) => {
+      if (value === false) {
+        entries.push(key);
+        return;
+      }
+    });
+
+    if (entries.length === 0) {
+      dispatch(setCompleted("astronauts", true));
+      dispatch(setNotification("astronauts", "astronauts ok"));
+    } else {
+      dispatch(
+        setNotification("astronauts", "complete the astronauts section")
+      );
+      dispatch(setCompleted("astronauts", false));
+    }
+  }, [newFlight.allowStart?.astronauts, newFlight?.completed?.schedule]);
 
   // notifications
-  useEffect(() => {
-    if (!selectedRocket) {
-      return setNotification("Complete previous parts first");
-    }
-    if (!selectedAstronauts) {
-      // setCompletedParts({ ...completedParts, astronauts: false });
-      setCompletedParts(false);
-      return setNotification("Select Astronauts");
-    }
-    if (selectedAstronauts.length === selectedRocket.numberCrew) {
-      // setCompletedParts({
-      //   ...completedParts,
-      //   astronauts: true,
-      // });
-      setCompletedParts(true);
-      setNotification("Astronauts OK");
-    } else {
-      // setCompletedParts({
-      //   ...completedParts,
-      //   astronauts: false,
-      // });
-      setCompletedParts(false);
-      return setNotification("Select the whole crew");
-    }
-  }, [selectedRocket, selectedAstronauts]);
+  // useEffect(() => {
+  //   if (!selectedRocket) {
+  //     return setNotification("Complete previous parts first");
+  //   }
+  //   if (!selectedAstronauts) {
+  //     // setCompletedParts({ ...completedParts, astronauts: false });
+  //     setCompletedParts(false);
+  //     return setNotification("Select Astronauts");
+  //   }
+  //   if (selectedAstronauts.length === selectedRocket.numberCrew) {
+  //     // setCompletedParts({
+  //     //   ...completedParts,
+  //     //   astronauts: true,
+  //     // });
+  //     setCompletedParts(true);
+  //     setNotification("Astronauts OK");
+  //   } else {
+  //     // setCompletedParts({
+  //     //   ...completedParts,
+  //     //   astronauts: false,
+  //     // });
+  //     setCompletedParts(false);
+  //     return setNotification("Select the whole crew");
+  //   }
+  // }, [selectedRocket, selectedAstronauts]);
 
   return (
     <>
@@ -60,24 +88,25 @@ function SelectAstronauts({
         <CrewNumber />
         <Astronauts />
 
-        {/* <div>Select Available Astronauts:</div>
-        {astronauts?.map((a, i) => {
-          return (
-            <AstronautRow
-              key={a.surname}
-              astronaut={a}
-              i={i}
-              selectedAstronauts={selectedAstronauts}
-              setSelectedAstronauts={setSelectedAstronauts}
-              crew={selectedRocket?.numberCrew}
-            />
-          );
-        })} */}
-        <div className="notification">{notification}</div>
+        <StyledNotification bgColor={newFlight.completed?.astronauts}>
+          {notification}
+        </StyledNotification>
       </StyledFormSection>
     </>
   );
 }
+
+const StyledNotification = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 6rem;
+  padding: 1rem 0;
+  align-self: center;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  background-color: ${(props) => (props.bgColor ? "#61b66c" : "#be1e2d")};
+`;
 
 const StyledFormSection = styled.div`
   display: flex;

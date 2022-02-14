@@ -26,6 +26,7 @@ const initialProps = {
     astronauts: false,
   },
   tankLevelForStart: 0,
+  selectedAstronauts: [],
 };
 // action creators
 export const initNewFlight = () => {

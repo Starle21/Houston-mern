@@ -7,12 +7,15 @@ import AstronautRow from "./AstronautRow";
 
 import astronautService from "../../../../../services/astronauts";
 
-import { updateNewFlight } from "../../../../../store/reducers/newFlightReducer";
+import {
+  updateNewFlight,
+  allowStart,
+} from "../../../../../store/reducers/newFlightReducer";
 
 function Astronauts() {
   const dispatch = useDispatch();
   const rocket = useSelector((state) => state.newFlight?.rocket);
-  // const crew = useSelector((state) => state.newFlight?.rocket?.numberCrew);
+  const crew = useSelector((state) => state.newFlight?.rocket?.numberCrew);
   const timeTakeOff = useSelector((state) => state.newFlight?.takeOffTimeDate);
   const distance = useSelector((state) => state.newFlight?.distance);
   const timeTouchDown = useSelector(
@@ -21,18 +24,32 @@ function Astronauts() {
   const availableAstronauts = useSelector(
     (state) => state.newFlight?.availableAstronauts
   );
+  const selectedAstronauts = useSelector(
+    (state) => state.newFlight?.selectedAstronauts
+  );
 
   useEffect(() => {
     if (!rocket || !timeTakeOff || !timeTouchDown) return;
     // axios get astronauts with those updated parameters
     // TO-DO frontend send with parameters, TO-DO backend - crunch the parameters
-    astronautService
-      .getAll()
-      // save them to redux
-      .then((allAstronauts) =>
-        dispatch(updateNewFlight("availableAstronauts", allAstronauts))
-      );
+
+    const getAllAstronauts = async () => {
+      const allAstronauts = await astronautService.getAll();
+      dispatch(updateNewFlight("availableAstronauts", allAstronauts));
+    };
+    getAllAstronauts();
+
+    dispatch(updateNewFlight("selectedAstronauts", []));
   }, [rocket, timeTakeOff, timeTouchDown]);
+
+  useEffect(() => {
+    if (!selectedAstronauts) return;
+    if (selectedAstronauts.length === crew) {
+      dispatch(allowStart("astronauts", "allSelected", true));
+    } else {
+      dispatch(allowStart("astronauts", "allSelected", false));
+    }
+  }, [selectedAstronauts]);
 
   const empty = () => (
     <StyledAstronautsHeading>
@@ -41,15 +58,14 @@ function Astronauts() {
   );
 
   const astronautsList = () => {
+    if (!availableAstronauts) return;
     return availableAstronauts.map((a, i) => {
       return (
         <AstronautRow
           key={a.surname}
           astronaut={a}
-          // i={i}
-          // selectedAstronauts={selectedAstronauts}
-          // setSelectedAstronauts={setSelectedAstronauts}
-          // crew={crew}
+          selectedAstronauts={selectedAstronauts}
+          crew={crew}
         />
       );
     });
