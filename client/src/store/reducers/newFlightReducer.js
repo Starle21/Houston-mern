@@ -22,8 +22,9 @@ const initialProps = {
   completed: {
     schedule: false,
     fuel: false,
-    food: false,
     astronauts: false,
+    food: false,
+    load: false,
   },
   tankLevelForStart: 0,
   selectedAstronauts: [],

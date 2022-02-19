@@ -4,7 +4,7 @@ import styled from "styled-components";
 import ScheduleRocket from "./FormSections/ScheduleRocket/ScheduleRocket";
 import Fuel from "./FormSections/Fuel/Fuel";
 import SelectAstronauts from "./FormSections/Astronauts/SelectAstronauts";
-import CheckFood from "./FormSections/CheckFood";
+import CheckFood from "./FormSections/Food/CheckFood";
 import Load from "./FormSections/Load";
 import flightService from "../../../services/flights";
 import { useNavigate } from "react-router-dom";
@@ -134,13 +134,7 @@ function CreateNewFlight() {
           <form onSubmit={createNewFlight} id="newFlight">
             <ScheduleRocket />
             <Fuel />
-            <SelectAstronauts
-              selectedRocket={selectedRocket}
-              selectedAstronauts={selectedAstronauts}
-              setSelectedAstronauts={setSelectedAstronauts}
-              setCompletedParts={setPartAstronauts}
-              completedParts={partAstronauts}
-            />
+            <SelectAstronauts />
             <CheckFood
               selectedRocket={selectedRocket}
               selectedAstronauts={selectedAstronauts}
