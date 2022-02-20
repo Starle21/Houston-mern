@@ -5,7 +5,7 @@ import ScheduleRocket from "./FormSections/ScheduleRocket/ScheduleRocket";
 import Fuel from "./FormSections/Fuel/Fuel";
 import SelectAstronauts from "./FormSections/Astronauts/SelectAstronauts";
 import CheckFood from "./FormSections/Food/CheckFood";
-import Load from "./FormSections/Load";
+import Load from "./FormSections/Load/Load";
 import flightService from "../../../services/flights";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +31,10 @@ function CreateNewFlight() {
   const isPartFoodComplete = useSelector(
     (state) => state.newFlight.completed?.food
   );
+  const isPartLoadComplete = useSelector(
+    (state) => state.newFlight.completed?.load
+  );
+  const [disabledStart, setDisabledStart] = useState(true);
 
   useEffect(() => {
     dispatch(initNewFlight());
@@ -38,59 +42,50 @@ function CreateNewFlight() {
 
   console.log(newFlight);
 
-  const [selectedRocket, setSelectedRocket] = useState();
-  const [fuelForFlight, setFuelForFlight] = useState([]);
-  const [selectedAstronauts, setSelectedAstronauts] = useState([]);
-  const [durationSeconds, setDurationSeconds] = useState();
-  const [partAstronauts, setPartAstronauts] = useState(false);
-  const [partSchedule, setPartSchedule] = useState(false);
-  const [completedParts, setCompletedParts] = useState({
-    fuel: false,
-    food: false,
-    load: false,
-  });
-  const [disabledStart, setDisabledStart] = useState(true);
-  const [fasters, setFasters] = useState([]);
-  const [distance, setDistance] = useState(3000000);
-  const [name, setName] = useState("Over the moon");
-  const [takeOff, setTakeOff] = useState("");
   const navigate = useNavigate();
 
   // if all completed parts true, enable SCHEDULE FLIGHT button
   useEffect(() => {
     if (
-      partSchedule &&
-      completedParts.fuel &&
-      partAstronauts &&
-      completedParts.food &&
-      completedParts.load
+      isPartScheduleComplete &&
+      isPartFuelComplete &&
+      isPartAstronautsComplete &&
+      isPartFoodComplete &&
+      isPartLoadComplete
     ) {
       setDisabledStart(false);
     } else {
       setDisabledStart(true);
     }
-  }, [completedParts, partAstronauts, partSchedule]);
+  }, [
+    isPartScheduleComplete,
+    isPartFuelComplete,
+    isPartAstronautsComplete,
+    isPartFoodComplete,
+    isPartLoadComplete,
+  ]);
 
   // schedule new flight handler
   const createNewFlight = (e) => {
     e.preventDefault();
-    const newFlight = {
-      name: name,
-      distance: distance,
-      rocket: selectedRocket,
-      takeOffTimeDate: takeOff,
-      //rocket current tank level
-      //rocket current food level
-      status: "scheduled",
-      astronauts: selectedAstronauts,
-      fasters: fasters,
-      createdBy: "Ben",
-    };
-    flightService.create(newFlight).then((res) => {
-      navigate("/in/flights");
-      console.log(res);
-    });
     console.log(newFlight);
+    // const newFlight = {
+    //   name: name,
+    //   distance: distance,
+    //   rocket: selectedRocket,
+    //   takeOffTimeDate: takeOff,
+    //   //rocket current tank level
+    //   //rocket current food level
+    //   status: "scheduled",
+    //   astronauts: selectedAstronauts,
+    //   fasters: fasters,
+    //   createdBy: "Ben",
+    // };
+    // flightService.create(newFlight).then((res) => {
+    //   navigate("/in/flights");
+    //   console.log(res);
+    // });
+    // console.log(newFlight);
   };
 
   return (
@@ -101,9 +96,9 @@ function CreateNewFlight() {
         </div>
         <div className="divider"></div>
         <div>
+          {/* status bar showing the progress */}
           <div className="statusBar">
             <span> {">> "} </span>
-
             <StatusButton className="statusBtn" filled={isPartScheduleComplete}>
               schedule&rocket
             </StatusButton>
@@ -121,7 +116,7 @@ function CreateNewFlight() {
             <StatusButton className="statusBtn" filled={isPartFoodComplete}>
               check food
             </StatusButton>
-            <StatusButton className="statusBtn" filled={completedParts.load}>
+            <StatusButton className="statusBtn" filled={isPartLoadComplete}>
               check load
             </StatusButton>
             <span> {" >> "}</span>
@@ -134,26 +129,14 @@ function CreateNewFlight() {
               schedule flight
             </MainButton>
           </div>
+
+          {/* new flight form divided into sections */}
           <form onSubmit={createNewFlight} id="newFlight">
             <ScheduleRocket />
             <Fuel />
             <SelectAstronauts />
-            <CheckFood
-              selectedRocket={selectedRocket}
-              selectedAstronauts={selectedAstronauts}
-              durationSeconds={durationSeconds}
-              setSelectedRocket={setSelectedRocket}
-              setCompletedParts={setCompletedParts}
-              completedParts={completedParts}
-              fasters={fasters}
-              setFasters={setFasters}
-            />
-            <Load
-              selectedRocket={selectedRocket}
-              selectedAstronauts={selectedAstronauts}
-              setCompletedParts={setCompletedParts}
-              completedParts={completedParts}
-            />
+            <CheckFood />
+            <Load />
           </form>
         </div>
         <div className="last"></div>

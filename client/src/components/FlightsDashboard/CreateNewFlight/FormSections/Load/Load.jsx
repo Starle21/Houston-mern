@@ -3,63 +3,72 @@ import DivideFlights from "../../../../CommonSignedIn/DivideFlights";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
+
+import { setNotification } from "../../../../../store/reducers/notificationReducer";
 import { setCompleted } from "../../../../../store/reducers/newFlightReducer";
 
-import FridgeCapacity from "./FridgeCapacity";
-import FoodPerAstronaut from "./FoodPerAstronaut";
-import TotalFoodRequired from "./TotalFoodRequired";
-import FoodLevel from "./FoodLevel";
+import LoadAstronautRow from "./LoadAstronautRow";
 
-function CheckFood() {
+import FoodWeight from "./FoodWeight";
+import AstronautsWeight from "./AstronautsWeight";
+import TotalWeight from "./TotalWeight";
+import RocketLoadCapacity from "./RocketLoadCapacity";
+
+function Load() {
   const dispatch = useDispatch();
+  const notification = useSelector((state) => state.notification?.load);
   const newFlight = useSelector((state) => state.newFlight);
 
-  const [fasters, setFasters] = useState([]);
-  const [notification, setNotification] = useState();
-
   useEffect(() => {
-    if (!newFlight.allowStart?.food) return;
-
-    if (!newFlight?.completed?.schedule || !newFlight?.completed?.astronauts) {
-      // dispatch(setNotification("fuel", "Complete the first section"));
-      setNotification("Complete the previous sections");
-      dispatch(setCompleted("food", false));
+    if (!newFlight.allowStart?.load) return;
+    if (
+      !newFlight?.completed?.schedule ||
+      !newFlight?.completed?.astronauts ||
+      !newFlight?.completed?.food
+    ) {
+      dispatch(setNotification("load", "Complete the previous sections"));
+      dispatch(setCompleted("load", false));
       return;
     }
 
     const entries = [];
-    Object.entries(newFlight.allowStart.food).forEach(([key, value]) => {
+    Object.entries(newFlight.allowStart.load).forEach(([key, value]) => {
       if (value === false) {
         entries.push(key);
         return;
       }
     });
+    console.log(entries);
 
     if (entries.length === 0) {
-      dispatch(setCompleted("food", true));
-      // dispatch(setNotification("food", "food ok"));
-      setNotification("food ok");
+      dispatch(setCompleted("load", true));
+      dispatch(setNotification("load", "load ok"));
+      // setNotification("load ok");
     } else {
-      // dispatch(setNotification("food", "complete the food section"));
-      setNotification("complete the food section");
-      dispatch(setCompleted("food", false));
+      dispatch(
+        setNotification(
+          "load",
+          "The rocket is overloaded. Make it lighter (eg. take food out)"
+        )
+      );
+      dispatch(setCompleted("load", false));
     }
   }, [
-    newFlight.allowStart?.food,
     newFlight?.completed?.schedule,
     newFlight?.completed?.astronauts,
+    newFlight?.completed?.food,
+    newFlight.allowStart?.load,
   ]);
 
   return (
     <>
-      <DivideFlights>Check Food</DivideFlights>
+      <DivideFlights>Check Load</DivideFlights>
       <StyledFormSection>
-        <FridgeCapacity />
-        <FoodPerAstronaut fasters={fasters} setFasters={setFasters} />
-        <TotalFoodRequired fasters={fasters} />
-        <FoodLevel />
-
-        <StyledNotification bgColor={newFlight.completed?.food}>
+        <FoodWeight />
+        <AstronautsWeight />
+        <TotalWeight />
+        <RocketLoadCapacity />
+        <StyledNotification bgColor={newFlight.completed?.load}>
           {notification}
         </StyledNotification>
       </StyledFormSection>
@@ -105,12 +114,6 @@ const StyledFormSection = styled.div`
     margin-top: 1rem;
     align-self: center;
   }
-
-  .addFood {
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column;
-  }
 `;
 
-export default CheckFood;
+export default Load;

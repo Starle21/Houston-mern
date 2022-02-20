@@ -12,11 +12,12 @@ function LoadAstronautRow({ astronaut }) {
 
 const StyledFormSection = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   gap: 1rem;
-  border: 1px solid #f7911d54;
+  border: 1px solid #191e3b16;
   padding: 0.5rem 1.5rem;
-  margin: 2px 0;
+  margin: 1px 0;
 `;
 
 export default LoadAstronautRow;
