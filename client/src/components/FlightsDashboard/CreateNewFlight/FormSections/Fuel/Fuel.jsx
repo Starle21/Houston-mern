@@ -32,7 +32,6 @@ function Fuel() {
         return;
       }
     });
-    console.log(entries);
 
     if (entries.length === 0) {
       dispatch(setCompleted("fuel", true));

@@ -15,8 +15,8 @@ function TotalFoodRequired({ fasters }) {
   const selectedAstronauts = useSelector(
     (state) => state.newFlight?.selectedAstronauts
   );
-  const totalFoodWeight = useSelector(
-    (state) => state.newFlight?.totalFoodWeight
+  const totalFoodRequired = useSelector(
+    (state) => state.newFlight?.totalFoodRequired
   );
   const numberCrew = useSelector(
     (state) => state.newFlight?.rocket?.numberCrew
@@ -27,7 +27,7 @@ function TotalFoodRequired({ fasters }) {
   );
 
   useEffect(() => {
-    dispatch(updateNewFlight("totalFoodWeight", 0));
+    dispatch(updateNewFlight("totalFoodRequired", 0));
     totalFood();
   }, [duration, numberCrew, selectedAstronauts, fasters]);
 
@@ -49,15 +49,19 @@ function TotalFoodRequired({ fasters }) {
     // console.log(fastersPerHour);
     const totalFood = Math.round(foodNoFast - thirtyPercent * fastersPerHour);
 
+    checkTotalFood(totalFood);
+
+    dispatch(updateNewFlight("totalFoodRequired", totalFood));
+  };
+
+  const checkTotalFood = (totalFood) => {
     if (totalFood > fridgeCapacity) {
-      dispatch(allowStart("food", "totalFood", false));
+      dispatch(allowStart("food", "totalFoodRequired", false));
       setNotify("Too small a fridge!");
     } else {
-      dispatch(allowStart("food", "totalFood", true));
+      dispatch(allowStart("food", "totalFoodRequired", true));
       setNotify("");
     }
-
-    dispatch(updateNewFlight("totalFoodWeight", totalFood));
   };
 
   return (
@@ -67,7 +71,7 @@ function TotalFoodRequired({ fasters }) {
         <div>
           {!duration || numberCrew !== selectedAstronauts.length
             ? "?"
-            : `${totalFoodWeight} kg`}
+            : `${totalFoodRequired} kg`}
         </div>
         <div className="notify">{notify}</div>
       </div>

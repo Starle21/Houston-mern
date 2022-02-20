@@ -23,20 +23,32 @@ function TankLevel() {
 
   const [notify, setNotify] = useState("");
 
-  const changeNotify = (state, newNotification) => {
-    return newNotification;
-  };
-
+  // if rocket or distance changes, reset tank level for start to the current tank level of the rocket
   useEffect(() => {
     dispatch(updateTankLevelForStart(currentLevel));
   }, [newFlight?.rocket, newFlight?.distance]);
 
+  // check if the tank level is in the right format
   useEffect(() => {
     if (!requiredFuel) return; // checking only if required is true
     if (!tankLevelForStart) return;
     checkFormat();
   }, [allowRequiredFuel, requiredFuel, tankLevelForStart, newFlight?.distance]);
 
+  // button handler onClick, setting up fuel
+  const addFuel = (e) => {
+    e.preventDefault();
+
+    if (!allowRequiredFuel) {
+      dispatch(allowStart("fuel", "tankLevelForStart", false));
+      return;
+    }
+    dispatch(updateTankLevelForStart(requiredFuel));
+    dispatch(allowStart("fuel", "tankLevelForStart", true));
+    checkFormat();
+  };
+
+  // checking format, displaying notification
   const checkFormat = () => {
     if (tankLevelForStart === requiredFuel) {
       dispatch(allowStart("fuel", "tankLevelForStart", true));
@@ -52,18 +64,8 @@ function TankLevel() {
     }
   };
 
-  const addFuel = (e) => {
-    e.preventDefault();
-
-    if (!allowRequiredFuel) {
-      dispatch(allowStart("fuel", "tankLevelForStart", false));
-      // dispatch(updateTankLevelForStart(0));
-      return;
-    }
-
-    dispatch(allowStart("fuel", "tankLevelForStart", true));
-    dispatch(updateTankLevelForStart(requiredFuel));
-    checkFormat();
+  const changeNotify = (state, newNotification) => {
+    return newNotification;
   };
 
   const format = (value) => {

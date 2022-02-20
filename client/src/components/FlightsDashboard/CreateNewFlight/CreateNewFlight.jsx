@@ -28,6 +28,9 @@ function CreateNewFlight() {
   const isPartAstronautsComplete = useSelector(
     (state) => state.newFlight.completed?.astronauts
   );
+  const isPartFoodComplete = useSelector(
+    (state) => state.newFlight.completed?.food
+  );
 
   useEffect(() => {
     dispatch(initNewFlight());
@@ -115,7 +118,7 @@ function CreateNewFlight() {
             >
               select astronauts
             </StatusButton>
-            <StatusButton className="statusBtn" filled={completedParts.food}>
+            <StatusButton className="statusBtn" filled={isPartFoodComplete}>
               check food
             </StatusButton>
             <StatusButton className="statusBtn" filled={completedParts.load}>

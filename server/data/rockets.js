@@ -9,7 +9,7 @@ module.exports = [
     tankCapacity: 2500000,
     tankLevelForStart: 24900,
     fridgeCapacity: 30,
-    foodLevelForStart: 28,
+    foodLevelForStart: 12,
   },
   {
     id: "02",
