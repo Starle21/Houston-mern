@@ -2,6 +2,21 @@ const flightService = require("./services/flightService");
 const rocketService = require("./services/rocketService.js");
 const { updateCurrentData } = require("./realtimeMock/realtime");
 
+const removeLandedFlights = (takeOffTimeDate, speed, distance) => {
+  const now = Date.now();
+
+  const duration = distance / speed; // s
+  const formatTakeOff = new Date(takeOffTimeDate);
+  const takeOff = formatTakeOff.getTime() / 1000;
+  const touchDown = (takeOff + duration) * 1000;
+
+  if (touchDown <= now) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const Flights = (module.exports = {
   run: false,
   aborted: false,
@@ -12,6 +27,7 @@ const Flights = (module.exports = {
   i: 0,
   abortedFlights: [],
   currentFlights: [],
+
   getCurrentFlightsFromDb() {
     const flyingFlights = flightService
       .getAllFlights()
@@ -19,12 +35,32 @@ const Flights = (module.exports = {
 
     const rockets = rocketService.getAllRockets();
 
-    this.currentFlights = flyingFlights.map((f) => {
+    const flightsWithRocket = flyingFlights.map((f) => {
       const rocket = rockets.filter((r) => r.id === f.rocket.id)[0];
       return { ...f, rocket: rocket };
     });
+
+    // remove flights that has already landed
+    // check date.now > date.touchDown --> remove, change status
+    const removedLandedFlights = flightsWithRocket
+      .map((f) => {
+        return removeLandedFlights(
+          f.takeOffTimeDate,
+          f.rocket.speed,
+          f.distance
+        )
+          ? ""
+          : f;
+      })
+      .filter((f) => f !== "");
+
+    // console.log(removedLandedFlights);
+
+    this.currentFlights = removedLandedFlights;
   },
+
   getCurrentFlightsData(io, socket) {
+    console.log(this.currentFlights);
     if (this.currentFlights.length > 0 && !this.run) {
       this.run = true;
       this.renderFlights(io);

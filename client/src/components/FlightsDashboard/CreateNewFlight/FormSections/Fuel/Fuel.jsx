@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import DivideFlights from "../../../../CommonSignedIn/DivideFlights";
 import styled from "styled-components";
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setNotification } from "../../../../../store/reducers/notificationReducer";
 
 import {
   updateNewFlight,

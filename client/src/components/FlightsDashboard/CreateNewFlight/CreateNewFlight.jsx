@@ -6,8 +6,8 @@ import Fuel from "./FormSections/Fuel/Fuel";
 import SelectAstronauts from "./FormSections/Astronauts/SelectAstronauts";
 import CheckFood from "./FormSections/Food/CheckFood";
 import Load from "./FormSections/Load/Load";
-import flightService from "../../../services/flights";
 import { useNavigate } from "react-router-dom";
+import flightService from "../../../services/flights";
 
 // astronauts status was patchy - state updated in the following components from the old state object.. - redux should fix that
 // filter unchecked fasters out - they stay in the state
@@ -65,10 +65,30 @@ function CreateNewFlight() {
     isPartLoadComplete,
   ]);
 
-  // schedule new flight handler
+  // schedule new flight button handler
   const createNewFlight = (e) => {
     e.preventDefault();
-    console.log(newFlight);
+    // console.log(newFlight);
+
+    const newFlightToSchedule = {
+      name: newFlight.name,
+      takeOffTimeDate: newFlight.takeOffTimeDate,
+      touchDownTimeDate: newFlight.touchDownTimeDate,
+      rocket: newFlight.rocket,
+      distance: newFlight.distance,
+      fuelForStart: newFlight.tankLevelForStart,
+      foodForStart: newFlight.foodLevelForStart,
+      createdBy: "Ben",
+
+      astronauts: newFlight.selectedAstronauts,
+      status: "scheduled",
+    };
+
+    flightService.create(newFlightToSchedule).then((res) => {
+      navigate("/in/flights");
+      console.log(res);
+    });
+
     // const newFlight = {
     //   name: name,
     //   distance: distance,

@@ -26,7 +26,7 @@ const updateCurrentData = (flyingFlights) => {
   // console.log("flying", socket.id);
   return flyingFlights.map((f) => {
     const distanceTravelled = updateCurrentDistance(
-      f.rocket.speed,
+      f.rocket?.speed,
       f.takeOffTimeDate
     );
     if (f.distance <= distanceTravelled) {
@@ -34,14 +34,14 @@ const updateCurrentData = (flyingFlights) => {
     }
 
     const currentTankLevel = updateCurrentFuel(
-      f.rocket.consumption,
+      f.rocket?.consumption,
       distanceTravelled,
-      f.rocket.tankLevelForStart
+      f.rocket?.tankLevelForStart
     );
     const currentFoodLevel = updateCurrentFood(
       f.distance,
       distanceTravelled,
-      f.rocket.foodLevelForStart
+      f.rocket?.foodLevelForStart
     );
     // landed, emit - landed to frontend
     // update database

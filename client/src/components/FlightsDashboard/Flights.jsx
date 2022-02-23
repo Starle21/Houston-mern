@@ -39,7 +39,7 @@ function Flights() {
     const socket = io("/");
 
     // msg to server - start to send current data
-    socket.emit("flights:getCurrent");
+    socket.emit("flights:getCurrentData");
 
     socket.on("flights:currentData", (data) => {
       setCurrentData(data);

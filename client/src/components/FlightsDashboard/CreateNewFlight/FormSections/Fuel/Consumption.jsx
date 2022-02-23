@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setNotification } from "../../../../../store/reducers/notificationReducer";
+import { useSelector } from "react-redux";
 
 function Consumption() {
   const selectedRocket = useSelector((state) => state.newFlight.rocket);
