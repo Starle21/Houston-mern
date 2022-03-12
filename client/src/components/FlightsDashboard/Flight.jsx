@@ -124,7 +124,8 @@ function Flight({ flight, socketRef, data, state, landed }) {
           <Range
             total={rocket?.tankCapacity}
             data={
-              data || state ? data?.currentTankLevel : rocket?.tankLevelForStart
+              // data || state ? data?.currentTankLevel : rocket?.tankLevelForStart
+              data || state ? data?.currentTankLevel : flight?.fuelForStart
             }
             unit="ML"
           />
@@ -137,7 +138,8 @@ function Flight({ flight, socketRef, data, state, landed }) {
           <Range
             total={rocket?.fridgeCapacity}
             data={
-              data || state ? data?.currentFoodLevel : rocket?.foodLevelForStart
+              // data || state ? data?.currentFoodLevel : rocket?.foodLevelForStart
+              data || state ? data?.currentFoodLevel : flight?.foodForStart
             }
             unit="KG"
           />

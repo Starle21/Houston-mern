@@ -6,6 +6,8 @@ module.exports = [
     distance: 900000,
     rocket: { id: "01" },
     status: "flying",
+    fuelForStart: 800000,
+    foodForStart: 20,
   },
   {
     id: "02",
@@ -14,6 +16,8 @@ module.exports = [
     distance: 4000000,
     rocket: { id: "02" },
     status: "flying",
+    fuelForStart: 60000,
+    foodForStart: 18,
   },
   {
     id: "03",
@@ -22,6 +26,8 @@ module.exports = [
     distance: 2000000,
     rocket: { id: "01" },
     status: "scheduled",
+    fuelForStart: 1500000,
+    foodForStart: 25,
   },
 ];
 

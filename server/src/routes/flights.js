@@ -17,6 +17,7 @@ flightsRouter.post("/", (_req, res) => {
     // add flight to database
     const addedFlight = flightService.addFlight(newFlight);
 
+    // scheduling a take off in the future
     const takeOff = new Date(newFlight.takeOffTimeDate);
     const io = _req.app.get("io");
     setTimeout(() => {
@@ -24,6 +25,7 @@ flightsRouter.post("/", (_req, res) => {
       flightService.updateFlightStatus({ ...newFlight, status: "flying" });
     }, takeOff.getTime() - Date.now());
 
+    // sending response
     res.json(addedFlight);
   } catch (e) {
     res.status(400).send(e.message);

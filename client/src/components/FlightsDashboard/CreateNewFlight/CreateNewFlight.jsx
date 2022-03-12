@@ -40,7 +40,7 @@ function CreateNewFlight() {
     dispatch(initNewFlight());
   }, []);
 
-  console.log(newFlight);
+  // console.log(newFlight);
 
   const navigate = useNavigate();
 

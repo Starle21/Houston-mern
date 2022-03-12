@@ -28,25 +28,25 @@ const Flights = (module.exports = {
 
     // remove flights that has already landed
     // check date.now > date.touchDown --> remove, change status
-    const removedLandedFlights = flightsWithRocket
-      .map((f) => {
-        return removeLandedFlights(
-          f.takeOffTimeDate,
-          f.rocket.speed,
-          f.distance
-        )
-          ? ""
-          : f;
-      })
-      .filter((f) => f !== "");
+    // const removedLandedFlights = flightsWithRocket
+    //   .map((f) => {
+    //     return removeLandedFlights(
+    //       f.takeOffTimeDate,
+    //       f.rocket.speed,
+    //       f.distance
+    //     )
+    //       ? ""
+    //       : f;
+    //   })
+    //   .filter((f) => f !== "");
 
     // console.log(removedLandedFlights);
 
-    this.currentFlights = removedLandedFlights;
+    this.currentFlights = flightsWithRocket;
   },
 
   getCurrentFlightsData(io, socket) {
-    console.log(this.currentFlights);
+    // console.log(this.currentFlights);
     if (this.currentFlights.length > 0 && !this.run) {
       this.run = true;
       this.renderFlights(io);

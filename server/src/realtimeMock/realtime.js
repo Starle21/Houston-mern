@@ -36,12 +36,14 @@ const updateCurrentData = (flyingFlights) => {
     const currentTankLevel = updateCurrentFuel(
       f.rocket?.consumption,
       distanceTravelled,
-      f.rocket?.tankLevelForStart
+      f.fuelForStart
+      // f.rocket?.tankLevelForStart
     );
     const currentFoodLevel = updateCurrentFood(
       f.distance,
       distanceTravelled,
-      f.rocket?.foodLevelForStart
+      f.foodForStart
+      // f.rocket?.foodLevelForStart
     );
     // landed, emit - landed to frontend
     // update database

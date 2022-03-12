@@ -6,6 +6,7 @@ const Range = ({ total, unit, data }) => {
   const currentReadOut = useRef();
 
   const positionReadOut = () => {
+    // console.log("data", data, total);
     const position = (data / total) * 100;
     if (position < 10) {
       return 5;
@@ -16,6 +17,7 @@ const Range = ({ total, unit, data }) => {
 
   const colorReadOut = () => {
     const position = (data / total) * 100;
+
     if (position < 6) {
       return "#f7931d";
     } else {
@@ -28,6 +30,7 @@ const Range = ({ total, unit, data }) => {
   }, [total]);
 
   useEffect(() => {
+    // console.log("data", data, total, positionReadOut());
     // console.log(data);
     progressBarRef.current.value = data;
     progressBarRef.current.style.setProperty(
@@ -43,7 +46,7 @@ const Range = ({ total, unit, data }) => {
       `${colorReadOut()}`
     );
     // console.log("unit", unit);
-  }, [data]);
+  }, [data, total]);
 
   return (
     <StyledRange>

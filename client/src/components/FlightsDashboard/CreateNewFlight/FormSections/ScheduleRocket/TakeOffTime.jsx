@@ -13,17 +13,17 @@ import {
 } from "../../../../../store/reducers/newFlightReducer";
 import { setNotification } from "../../../../../store/reducers/notificationReducer";
 
-const TakeOffTimeDate = forwardRef((props, ref) => {
+const TakeOffTimeDate = (props, ref) => {
   const dispatch = useDispatch();
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
 
-  useImperativeHandle(ref, () => {
-    return {
-      key: "takeOffTimeDate",
-      checkFormat,
-    };
-  });
+  // useImperativeHandle(ref, () => {
+  //   return {
+  //     key: "takeOffTimeDate",
+  //     checkFormat,
+  //   };
+  // });
 
   // handle change to redux
   useEffect(() => {
@@ -78,14 +78,14 @@ const TakeOffTimeDate = forwardRef((props, ref) => {
           onChange={(e) => {
             setDate(e.target.value);
           }}
-          min={disablePast()}
+          // min={disablePast()}
           allowed={date !== "" ? true : false}
           onFocus={handleFocus}
         />
       </div>
     </StyledTakeOff>
   );
-});
+};
 
 const StyledInput = styled.input`
   padding: 8px;
