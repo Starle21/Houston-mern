@@ -78,7 +78,7 @@ const TakeOffTimeDate = (props, ref) => {
           onChange={(e) => {
             setDate(e.target.value);
           }}
-          // min={disablePast()}
+          min={disablePast()}
           allowed={date !== "" ? true : false}
           onFocus={handleFocus}
         />
