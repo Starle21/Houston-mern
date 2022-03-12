@@ -1,10 +1,26 @@
 let flightsData = require("../../data/flights.js");
+const rocketsData = require("../../data/rockets.js");
+const { removeLandedFlights } = require("../utils/helper");
 
 // connecting to data stored localy
 // next step - connect to mongoDB
 
 const getAllFlights = () => {
-  return flightsData;
+  // filter landed flights out
+  const flightsWithRocket = flightsData.map((f) => {
+    const rocket = rocketsData.filter((r) => r.id === f.rocket.id)[0];
+    return { ...f, rocket: rocket };
+  });
+
+  const removedLandedFlights = flightsWithRocket
+    .map((f) => {
+      return removeLandedFlights(f.takeOffTimeDate, f.rocket.speed, f.distance)
+        ? ""
+        : f;
+    })
+    .filter((f) => f !== "");
+
+  return removedLandedFlights;
 };
 
 const addFlight = (newFlight) => {
